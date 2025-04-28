@@ -1,9 +1,9 @@
 class Product {
-  final int id;
-  final String title;
-  final double price;
-  final String description;
-  final String image;
+  int id;
+  String title;
+  double price;
+  String description;
+  String image;
 
   Product({
     required this.id,
@@ -15,16 +15,17 @@ class Product {
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
-      id: json['id'],
-      title: json['title'],
-      price: json['price'].toDouble(),
-      description: json['description'],
-      image: json['image'],
+      id: json['id'] ?? 0, // Default to 0 if id is null
+      title: json['title'] ?? '', // Default to empty string if title is null
+      price: (json['price'] ?? 0).toDouble(), // Default to 0.0 if price is null
+      description: json['description'] ?? '', // Default to empty string
+      image: json['image'] ?? '', // Default to empty string
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'title': title,
       'price': price,
       'description': description,

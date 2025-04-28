@@ -21,7 +21,7 @@ class ProductService {
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(product.toJson()),
     );
-    if (response.statusCode == 200 || response.statusCode == 201) {
+    if (response.statusCode == 201) {
       return Product.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Failed to add product');

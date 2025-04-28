@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/product.dart';
 import '../services/product_service.dart';
+import '../services/local_storage_service.dart'; // Import LocalStorageService
 
 class HomePage extends StatefulWidget {
   @override
@@ -9,18 +10,49 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final ProductService _productService = ProductService();
-  late Future<List<Product>> _products;
+  final LocalStorageService _localStorageService = LocalStorageService();
+  List<Product> _products = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _products = _productService.fetchProducts();
+    _loadProducts();
   }
 
-  void _refreshProducts() {
+  Future<void> _loadProducts() async {
     setState(() {
-      _products = _productService.fetchProducts();
+      _isLoading = true;
     });
+    try {
+      // Load products from local storage first
+      final localProducts = await _localStorageService.getProducts();
+      if (localProducts.isNotEmpty) {
+        setState(() {
+          _products = localProducts;
+        });
+      } else {
+        // If no local data, fetch from server
+        final fetchedProducts = await _productService.fetchProducts();
+        setState(() {
+          _products = fetchedProducts;
+        });
+        // Save fetched data to local storage
+        await _localStorageService.saveProducts(_products);
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load products: $e')),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _saveProductsLocally() async {
+    await _localStorageService.saveProducts(_products);
   }
 
   void _showProductForm({Product? product}) {
@@ -75,14 +107,31 @@ class _HomePageState extends State<HomePage> {
                   image: _imageController.text,
                 );
 
-                if (product == null) {
-                  await _productService.addProduct(newProduct);
-                } else {
-                  await _productService.updateProduct(product.id, newProduct);
+                try {
+                  if (product == null) {
+                    // Add new product
+                    final addedProduct =
+                        await _productService.addProduct(newProduct);
+                    setState(() {
+                      _products.add(addedProduct);
+                    });
+                  } else {
+                    // Update existing product
+                    await _productService.updateProduct(product.id, newProduct);
+                    setState(() {
+                      final index = _products.indexWhere((p) => p.id == product.id);
+                      if (index != -1) {
+                        _products[index] = newProduct;
+                      }
+                    });
+                  }
+                  await _saveProductsLocally(); // Save updated products locally
+                  Navigator.pop(context);
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Failed to save product: $e')),
+                  );
                 }
-
-                _refreshProducts();
-                Navigator.pop(context);
               },
               child: Text(product == null ? 'Add' : 'Save'),
             ),
@@ -114,8 +163,17 @@ class _HomePageState extends State<HomePage> {
     );
 
     if (confirm == true) {
-      await _productService.deleteProduct(id);
-      _refreshProducts();
+      try {
+        await _productService.deleteProduct(id);
+        setState(() {
+          _products.removeWhere((product) => product.id == id);
+        });
+        await _saveProductsLocally(); // Save updated products locally
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to delete product: $e')),
+        );
+      }
     }
   }
 
@@ -126,49 +184,43 @@ class _HomePageState extends State<HomePage> {
         title: Text('Product List'),
         actions: [
           IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: _loadProducts,
+          ),
+          IconButton(
             icon: Icon(Icons.add),
             onPressed: () => _showProductForm(),
           ),
         ],
       ),
-      body: FutureBuilder<List<Product>>(
-        future: _products,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No products available.'));
-          }
-
-          final products = snapshot.data!;
-          return ListView.builder(
-            itemCount: products.length,
-            itemBuilder: (context, index) {
-              final product = products[index];
-              return ListTile(
-                leading: Image.network(product.image, width: 50, height: 50),
-                title: Text(product.title),
-                subtitle: Text('\$${product.price.toStringAsFixed(2)}'),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.edit),
-                      onPressed: () => _showProductForm(product: product),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () => _deleteProduct(product.id),
-                    ),
-                  ],
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : _products.isEmpty
+              ? Center(child: Text('No products available.'))
+              : ListView.builder(
+                  itemCount: _products.length,
+                  itemBuilder: (context, index) {
+                    final product = _products[index];
+                    return ListTile(
+                      leading: Image.network(product.image, width: 50, height: 50),
+                      title: Text(product.title),
+                      subtitle: Text('\$${product.price.toStringAsFixed(2)}'),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () => _showProductForm(product: product),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () => _deleteProduct(product.id),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
-          );
-        },
-      ),
     );
   }
 }
