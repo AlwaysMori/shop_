@@ -27,4 +27,16 @@ class EmployeeService {
     return employees.any(
         (employee) => employee.username == username && employee.password == password);
   }
+
+  Future<String?> getUserRole(String username, String password) async {
+    final List<Employee> employees = await getEmployees();
+    try {
+      final employee = employees.firstWhere(
+        (e) => e.username == username && e.password == password,
+      );
+      return employee.position; 
+    } catch (e) {
+      return null; 
+    }
+  }
 }

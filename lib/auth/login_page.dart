@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/employee_service.dart';
 import '../home/home_page.dart'; // Import HomePage
+import '../home/cashier_page.dart'; // Import CashierPage
 
 class LoginPage extends StatefulWidget {
   @override
@@ -15,19 +16,27 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
-      final bool isValid = await _employeeService.validateLogin(
+      final String? role = await _employeeService.getUserRole(
         _usernameController.text,
         _passwordController.text,
       );
 
-      if (isValid) {
+      if (role != null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Login successful!')),
         );
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage()),
-        );
+
+        if (role == 'Manager') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()),
+          );
+        } else if (role == 'Cashier') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => CashierPage()),
+          );
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Invalid username or password')),
