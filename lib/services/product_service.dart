@@ -21,9 +21,13 @@ class ProductService {
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(product.toJson()),
     );
-    if (response.statusCode == 201) {
-      return Product.fromJson(jsonDecode(response.body));
+
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      // Parse the response body to create a Product object
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
+      return Product.fromJson(responseData);
     } else {
+      print('Failed to add product: ${response.body}'); // Log the error response
       throw Exception('Failed to add product');
     }
   }
@@ -34,14 +38,18 @@ class ProductService {
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(product.toJson()),
     );
+
     if (response.statusCode != 200) {
+      print('Failed to update product: ${response.body}'); // Log the error response
       throw Exception('Failed to update product');
     }
   }
 
   Future<void> deleteProduct(int id) async {
     final response = await http.delete(Uri.parse('$baseUrl/$id'));
+
     if (response.statusCode != 200) {
+      print('Failed to delete product: ${response.body}'); // Log the error response
       throw Exception('Failed to delete product');
     }
   }

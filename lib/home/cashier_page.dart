@@ -53,7 +53,14 @@ class _CashierPageState extends State<CashierPage> {
                   itemBuilder: (context, index) {
                     final product = _products[index];
                     return ListTile(
-                      leading: Image.network(product.image, width: 50, height: 50),
+                      leading: Image.network(
+                        product.image,
+                        width: 50,
+                        height: 50,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(Icons.broken_image, size: 50); // Show broken image icon
+                        },
+                      ),
                       title: Text(product.title),
                       subtitle: Text('\$${product.price.toStringAsFixed(2)}'),
                     );

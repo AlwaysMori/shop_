@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:validators/validators.dart'; // Import for URL validation
 import '../models/product.dart';
 import '../services/product_service.dart';
-import '../services/local_storage_service.dart'; // Import LocalStorageService
+import '../services/local_storage_service.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -19,6 +20,9 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _loadProducts();
   }
+bool isImageUrl(String url) {
+  return isURL(url) && (url.endsWith('.png') || url.endsWith('.jpg') || url.endsWith('.jpeg') || url.endsWith('.webp'));
+}
 
   Future<void> _loadProducts() async {
     setState(() {
@@ -99,19 +103,30 @@ class _HomePageState extends State<HomePage> {
             ),
             ElevatedButton(
               onPressed: () async {
+                final imageUrl = _imageController.text;
+                if (!isImageUrl(imageUrl)) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Invalid image URL')),
+                    );
+                    return
+                    ;
+                    }
+
+
                 final newProduct = Product(
-                  id: product?.id ?? 0,
+                  id: product?.id ?? (_products.isNotEmpty
+                      ? _products.last.id + 1
+                      : 1), // Generate a unique ID
                   title: _titleController.text,
                   price: double.parse(_priceController.text),
                   description: _descriptionController.text,
-                  image: _imageController.text,
+                  image: imageUrl,
                 );
 
                 try {
                   if (product == null) {
                     // Add new product
-                    final addedProduct =
-                        await _productService.addProduct(newProduct);
+                    final addedProduct = await _productService.addProduct(newProduct);
                     setState(() {
                       _products.add(addedProduct);
                     });
@@ -202,7 +217,14 @@ class _HomePageState extends State<HomePage> {
                   itemBuilder: (context, index) {
                     final product = _products[index];
                     return ListTile(
-                      leading: Image.network(product.image, width: 50, height: 50),
+                      leading: Image.network(
+                        product.image,
+                        width: 50,
+                        height: 50,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(Icons.broken_image, size: 50);
+                        },
+                      ), // Show broken image icon
                       title: Text(product.title),
                       subtitle: Text('\$${product.price.toStringAsFixed(2)}'),
                       trailing: Row(
