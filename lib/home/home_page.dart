@@ -20,9 +20,10 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _loadProducts();
   }
-bool isImageUrl(String url) {
-  return isURL(url) && (url.endsWith('.png') || url.endsWith('.jpg') || url.endsWith('.jpeg') || url.endsWith('.webp'));
-}
+
+  bool isValidUrl(String url) {
+    return isURL(url); // Validate only if it's a valid URL
+  }
 
   Future<void> _loadProducts() async {
     setState(() {
@@ -104,14 +105,12 @@ bool isImageUrl(String url) {
             ElevatedButton(
               onPressed: () async {
                 final imageUrl = _imageController.text;
-                if (!isImageUrl(imageUrl)) {
+                if (!isValidUrl(imageUrl)) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Invalid image URL')),
-                    );
-                    return
-                    ;
-                    }
-
+                  );
+                  return;
+                }
 
                 final newProduct = Product(
                   id: product?.id ?? (_products.isNotEmpty
@@ -125,13 +124,11 @@ bool isImageUrl(String url) {
 
                 try {
                   if (product == null) {
-                    // Add new product
                     final addedProduct = await _productService.addProduct(newProduct);
                     setState(() {
                       _products.add(addedProduct);
                     });
                   } else {
-                    // Update existing product
                     await _productService.updateProduct(product.id, newProduct);
                     setState(() {
                       final index = _products.indexWhere((p) => p.id == product.id);
