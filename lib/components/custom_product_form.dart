@@ -21,86 +21,108 @@ class CustomProductForm extends StatelessWidget {
         TextEditingController(text: product?.image ?? '');
 
     return AlertDialog(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.transparent, // Make background transparent
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
-      title: Text(
-        product == null ? 'Add Product' : 'Edit Product',
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: Colors.blue,
-        ),
-      ),
-      content: SingleChildScrollView(
-        child: Column(
-          children: [
-            TextField(
-              controller: _titleController,
-              decoration: InputDecoration(
-                labelText: 'Title',
-                labelStyle: TextStyle(color: Colors.blue),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[200]!),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-            ),
-            SizedBox(height: 16),
-            TextField(
-              controller: _priceController,
-              decoration: InputDecoration(
-                labelText: 'Price',
-                labelStyle: TextStyle(color: Colors.blue),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[200]!),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              keyboardType: TextInputType.number,
-            ),
-            SizedBox(height: 16),
-            TextField(
-              controller: _descriptionController,
-              decoration: InputDecoration(
-                labelText: 'Description',
-                labelStyle: TextStyle(color: Colors.blue),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[200]!),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-            ),
-            SizedBox(height: 16),
-            TextField(
-              controller: _imageController,
-              decoration: InputDecoration(
-                labelText: 'Image URL',
-                labelStyle: TextStyle(color: Colors.blue),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[200]!),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
+      contentPadding: EdgeInsets.zero, // Remove default padding
+      content: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blueGrey[100]!, Colors.blueGrey[300]!], // Gradient background
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black, // Solid black shadow
+              offset: Offset(4, 4), // Shadow on the right and bottom
+              blurRadius: 0, // No blur for solid shadow
             ),
           ],
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                product == null ? 'Add Product' : 'Edit Product',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueGrey[800], // Neutral text color
+                  fontFamily: 'Poppins', // Apply Poppins font
+                ),
+              ),
+              SizedBox(height: 16),
+              TextField(
+                controller: _titleController,
+                decoration: InputDecoration(
+                  labelText: 'Title',
+                  labelStyle: TextStyle(color: Colors.blueGrey[800]),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blueGrey[600]!),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blueGrey[400]!),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16),
+              TextField(
+                controller: _priceController,
+                decoration: InputDecoration(
+                  labelText: 'Price',
+                  labelStyle: TextStyle(color: Colors.blueGrey[800]),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blueGrey[600]!),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blueGrey[400]!),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                keyboardType: TextInputType.number,
+              ),
+              SizedBox(height: 16),
+              TextField(
+                controller: _descriptionController,
+                decoration: InputDecoration(
+                  labelText: 'Description',
+                  labelStyle: TextStyle(color: Colors.blueGrey[800]),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blueGrey[600]!),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blueGrey[400]!),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16),
+              TextField(
+                controller: _imageController,
+                decoration: InputDecoration(
+                  labelText: 'Image URL',
+                  labelStyle: TextStyle(color: Colors.blueGrey[800]),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blueGrey[600]!),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blueGrey[400]!),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       actions: [
@@ -108,7 +130,7 @@ class CustomProductForm extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
           child: Text(
             'Cancel',
-            style: TextStyle(color: Colors.blue),
+            style: TextStyle(color: Colors.blueGrey[800]), // Neutral text color
           ),
         ),
         ElevatedButton(
@@ -124,7 +146,7 @@ class CustomProductForm extends StatelessWidget {
             Navigator.pop(context);
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.blueGrey[600], // Neutral button color
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
