@@ -7,6 +7,7 @@ import '../components/custom_button.dart';
 import '../components/page_title.dart';
 import '../components/responsive_padding.dart';
 import '../components/custom_dropdown.dart';
+import '../components/notification_helper.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -32,8 +33,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
       // Periksa apakah username sudah ada
       if (await _isUsernameDuplicate(username)) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Username already exists. Please choose another one.')),
+        NotificationHelper.showNotification(
+          context,
+          'Username already exists. Please choose another one.',
+          isError: true,
         );
         return;
       }
@@ -48,8 +51,9 @@ class _RegisterPageState extends State<RegisterPage> {
       try {
         await _employeeService.saveEmployee(newEmployee);
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Employee registered successfully!')),
+        NotificationHelper.showNotification(
+          context,
+          'Employee registered successfully!',
         );
 
         _usernameController.clear();
@@ -64,13 +68,17 @@ class _RegisterPageState extends State<RegisterPage> {
           MaterialPageRoute(builder: (context) => LoginPage()),
         );
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to register employee: $e')),
+        NotificationHelper.showNotification(
+          context,
+          'Failed to register employee: $e',
+          isError: true,
         );
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please fill out all fields correctly.')),
+      NotificationHelper.showNotification(
+        context,
+        'Please fill out all fields correctly.',
+        isError: true,
       );
     }
   }

@@ -5,6 +5,7 @@ import '../home/cashier_page.dart';
 import 'register_page.dart';
 import '../components/custom_text_field.dart';
 import '../components/custom_button.dart';
+import '../components/notification_helper.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -32,8 +33,9 @@ class _LoginPageState extends State<LoginPage> {
           );
 
           if (role != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Login successful!')),
+            NotificationHelper.showNotification(
+              context,
+              'Login successful!',
             );
 
             if (role == 'Manager') {
@@ -49,18 +51,24 @@ class _LoginPageState extends State<LoginPage> {
             }
           }
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Invalid username or password')),
+          NotificationHelper.showNotification(
+            context,
+            'Invalid username or password',
+            isError: true,
           );
         }
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to login: $e')),
+        NotificationHelper.showNotification(
+          context,
+          'Failed to login: $e',
+          isError: true,
         );
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please fill out all fields correctly.')),
+      NotificationHelper.showNotification(
+        context,
+        'Please fill out all fields correctly.',
+        isError: true,
       );
     }
   }
