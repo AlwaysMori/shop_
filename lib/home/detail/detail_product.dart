@@ -10,23 +10,29 @@ class DetailProductPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Product Details'),
-        backgroundColor: Colors.blue,
+        title: Text(
+          'Product Details',
+          style: TextStyle(
+            fontFamily: 'Poppins', // Apply Poppins font
+            fontWeight: FontWeight.w300, // Light weight
+          ),
+        ),
+        backgroundColor: Colors.blueGrey, // Match home page theme
       ),
       body: Container(
-        color: Colors.blue[50],
+        color: const Color(0xFFB9C5C5), // Match home page background color
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Center(
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(0), // Square corners
                 child: AspectRatio(
-                  aspectRatio: 16 / 9, // Rasio fleksibel untuk gambar
+                  aspectRatio: 16 / 9,
                   child: Image.network(
                     product.image,
-                    fit: BoxFit.contain, // Menampilkan gambar tanpa terpotong
+                    fit: BoxFit.contain,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
                         color: Colors.grey[300],
@@ -44,38 +50,41 @@ class DetailProductPage extends StatelessWidget {
               product.title,
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.blue,
+                fontWeight: FontWeight.w300, // Light weight
+                color: Colors.blueGrey, // Match theme color
+                fontFamily: 'Poppins', // Apply Poppins font
               ),
             ),
             SizedBox(height: 10),
-            Divider(color: Colors.blue, thickness: 1), // Garis horizontal
+            Divider(color: Colors.blueGrey, thickness: 1), // Match theme color
             SizedBox(height: 10),
             Text(
               '\$${product.price.toStringAsFixed(2)}',
               style: TextStyle(
                 fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.green,
+                fontWeight: FontWeight.w300, // Light weight
+                color: Colors.green, // Keep green for price
+                fontFamily: 'Poppins', // Apply Poppins font
               ),
             ),
-            Divider(color: Colors.blue, thickness: 1),
+            Divider(color: Colors.blueGrey, thickness: 1), // Match theme color
             SizedBox(height: 20),
             Text(
               'Description:',
               style: TextStyle(
                 fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+                fontWeight: FontWeight.w300, // Light weight
+                color: Colors.blueGrey, // Match theme color
+                fontFamily: 'Poppins', // Apply Poppins font
               ),
             ),
-            SizedBox(height: 10),
             SizedBox(height: 10),
             Text(
               product.description,
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.black54,
+                color: Colors.blueGrey[700], // Slightly darker blue-grey
+                fontFamily: 'Poppins', // Apply Poppins font
               ),
             ),
           ],

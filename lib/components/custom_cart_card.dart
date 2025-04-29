@@ -17,43 +17,59 @@ class CustomCartCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      elevation: 3,
+      elevation: 0, // Remove default elevation
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-        side: BorderSide(color: Colors.blue, width: 1), // Border biru
+        borderRadius: BorderRadius.circular(0), // Square corners
       ),
-      color: Colors.white, // Latar belakang putih
-      child: ListTile(
-        leading: ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Image.network(
-            imageUrl,
-            width: 50,
-            height: 50,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return Icon(Icons.broken_image, size: 50, color: Colors.grey);
-            },
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blueGrey[100]!, Colors.blueGrey[300]!], // Gradient background
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black, // Solid black shadow
+              offset: Offset(4, 4), // Shadow on the right and bottom
+              blurRadius: 0, // No blur for solid shadow
+            ),
+          ],
         ),
-        title: Text(
-          title,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.blue, // Teks biru
+        child: ListTile(
+          leading: ClipRRect(
+            borderRadius: BorderRadius.circular(0), // Square corners
+            child: Image.network(
+              imageUrl,
+              width: 50,
+              height: 50,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Icon(Icons.broken_image, size: 50, color: Colors.grey);
+              },
+            ),
           ),
-        ),
-        subtitle: Text(
-          subtitle,
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.black54,
+          title: Text(
+            title,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w300, // Light weight
+              color: Colors.blueGrey[800], // Slightly darker text color
+              fontFamily: 'Poppins', // Apply Poppins font
+            ),
           ),
-        ),
-        trailing: IconButton(
-          icon: Icon(Icons.delete, color: Colors.red),
-          onPressed: onRemove,
+          subtitle: Text(
+            subtitle,
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.blueGrey[600], // Slightly lighter text color
+              fontFamily: 'Poppins', // Apply Poppins font
+            ),
+          ),
+          trailing: IconButton(
+            icon: Icon(Icons.delete, color: Colors.red),
+            onPressed: onRemove,
+          ),
         ),
       ),
     );

@@ -60,11 +60,17 @@ class _TotalPaymentPageState extends State<TotalPaymentPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cart'),
-        backgroundColor: Colors.blue,
+        title: Text(
+          'Cart',
+          style: TextStyle(
+            fontFamily: 'Poppins', // Apply Poppins font
+            fontWeight: FontWeight.w300, // Light weight
+          ),
+        ),
+        backgroundColor: Colors.blueGrey, // Match theme
       ),
       body: Container(
-        color: Colors.white,
+        color: const Color(0xFFB9C5C5), // Match theme background color
         child: Column(
           children: [
             Expanded(
@@ -74,8 +80,9 @@ class _TotalPaymentPageState extends State<TotalPaymentPage> {
                         'Your cart is empty.',
                         style: TextStyle(
                           fontSize: 18,
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Poppins', // Apply Poppins font
+                          fontWeight: FontWeight.w300, // Light weight
+                          color: Colors.blueGrey, // Match theme color
                         ),
                       ),
                     )
@@ -87,13 +94,13 @@ class _TotalPaymentPageState extends State<TotalPaymentPage> {
                           title: product.title,
                           subtitle: '\$${product.price.toStringAsFixed(2)}',
                           imageUrl: product.image,
-                          onRemove: () => _removeFromCart(product), // Use updated method
+                          onRemove: () => _removeFromCart(product),
                         );
                       },
                     ),
             ),
             Container(
-              color: Colors.blue[50],
+              color: Colors.blueGrey[100], // Match theme background
               padding: const EdgeInsets.all(16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -102,22 +109,27 @@ class _TotalPaymentPageState extends State<TotalPaymentPage> {
                     'Total: \$${total.toStringAsFixed(2)}',
                     style: TextStyle(
                       fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
+                      fontWeight: FontWeight.w500, // Medium weight
+                      color: Colors.blueGrey[800], // Slightly darker text color
+                      fontFamily: 'Poppins', // Apply Poppins font
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: _confirmPayment, // Show custom confirmation dialog
+                    onPressed: _confirmPayment,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor: Colors.blueGrey, // Match theme color
                       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(0), // Square corners
                       ),
                     ),
                     child: Text(
                       'Complete Payment',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontFamily: 'Poppins', // Apply Poppins font
+                      ),
                     ),
                   ),
                 ],

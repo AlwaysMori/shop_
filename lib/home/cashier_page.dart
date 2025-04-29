@@ -70,8 +70,14 @@ class _CashierPageState extends State<CashierPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Cashier Product List'),
-        backgroundColor: Colors.blue,
+        title: Text(
+          'Cashier Product List',
+          style: TextStyle(
+            fontFamily: 'Poppins', // Apply Poppins font
+            fontWeight: FontWeight.w300, // Light weight
+          ),
+        ),
+        backgroundColor: Colors.blueGrey, // Match home page theme
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
@@ -81,7 +87,7 @@ class _CashierPageState extends State<CashierPage> {
       ),
       body: SafeArea(
         child: Container(
-          color: Colors.blue[50],
+          color: const Color(0xFFB9C5C5), // Match home page background color
           child: Column(
             children: [
               CustomSearchBar(
@@ -92,7 +98,16 @@ class _CashierPageState extends State<CashierPage> {
                 child: _isLoading
                     ? Center(child: CircularProgressIndicator())
                     : _filteredProducts.isEmpty
-                        ? Center(child: Text('No products found.'))
+                        ? Center(
+                            child: Text(
+                              'No products found.',
+                              style: TextStyle(
+                                fontFamily: 'Poppins', // Apply Poppins font
+                                fontWeight: FontWeight.w300, // Light weight
+                                color: Colors.blueGrey, // Match theme color
+                              ),
+                            ),
+                          )
                         : GridView.builder(
                             padding: EdgeInsets.all(16),
                             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -133,7 +148,7 @@ class _CashierPageState extends State<CashierPage> {
                 builder: (context) => TotalPaymentPage(),
               ),
             ),
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.blueGrey, // Match home page theme
             child: Icon(Icons.shopping_cart, color: Colors.white),
           ),
           if (Provider.of<ProductProvider>(context).cart.isNotEmpty)

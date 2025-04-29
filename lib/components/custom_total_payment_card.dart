@@ -20,9 +20,15 @@ class CustomTotalPaymentCard extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white, // Latar belakang putih
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.blue, width: 2), // Border biru
+          color: Colors.blueGrey[50], // Match theme background
+          borderRadius: BorderRadius.circular(0), // Square corners
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black, // Solid black shadow
+              offset: Offset(4, 4), // Shadow on the right and bottom
+              blurRadius: 0, // No blur for solid shadow
+            ),
+          ],
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -31,8 +37,9 @@ class CustomTotalPaymentCard extends StatelessWidget {
               'Total Payment',
               style: TextStyle(
                 fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.blue, // Teks biru
+                fontWeight: FontWeight.w500, // Medium weight
+                color: Colors.blueGrey[800], // Slightly darker text color
+                fontFamily: 'Poppins', // Apply Poppins font
               ),
             ),
             SizedBox(height: 16),
@@ -41,11 +48,20 @@ class CustomTotalPaymentCard extends StatelessWidget {
               children: [
                 Text(
                   'Total Items:',
-                  style: TextStyle(fontSize: 16, color: Colors.black),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'Poppins', // Apply Poppins font
+                    color: Colors.blueGrey[700], // Slightly lighter text color
+                  ),
                 ),
                 Text(
                   '$totalItems',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500, // Medium weight
+                    color: Colors.blueGrey[800], // Slightly darker text color
+                    fontFamily: 'Poppins', // Apply Poppins font
+                  ),
                 ),
               ],
             ),
@@ -55,11 +71,20 @@ class CustomTotalPaymentCard extends StatelessWidget {
               children: [
                 Text(
                   'Total Price:',
-                  style: TextStyle(fontSize: 16, color: Colors.black),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'Poppins', // Apply Poppins font
+                    color: Colors.blueGrey[700], // Slightly lighter text color
+                  ),
                 ),
                 Text(
                   '\$${totalPrice.toStringAsFixed(2)}',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500, // Medium weight
+                    color: Colors.blueGrey[800], // Slightly darker text color
+                    fontFamily: 'Poppins', // Apply Poppins font
+                  ),
                 ),
               ],
             ),
@@ -70,9 +95,14 @@ class CustomTotalPaymentCard extends StatelessWidget {
                 TextButton(
                   onPressed: () => Navigator.pop(context),
                   style: TextButton.styleFrom(
-                    foregroundColor: Colors.blue, // Teks biru
+                    foregroundColor: Colors.blueGrey, // Match theme color
                   ),
-                  child: Text('Cancel'),
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(
+                      fontFamily: 'Poppins', // Apply Poppins font
+                    ),
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -80,15 +110,18 @@ class CustomTotalPaymentCard extends StatelessWidget {
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue, // Tombol biru
+                    backgroundColor: Colors.blueGrey, // Match theme color
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(0), // Square corners
                     ),
                   ),
                   child: Text(
                     'Complete',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Poppins', // Apply Poppins font
+                    ),
                   ),
                 ),
               ],
