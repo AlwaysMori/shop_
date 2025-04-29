@@ -20,14 +20,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      final productProvider = Provider.of<ProductProvider>(context, listen: false);
-      productProvider.loadProducts().then((_) {
-        setState(() {
-          _filteredProducts = productProvider.products;
-        });
-      });
-    });
+    final productProvider = Provider.of<ProductProvider>(context, listen: false);
+    productProvider.loadProducts(); // Ensure products are loaded
+    _searchController.addListener(_searchProducts); // Add listener for search
   }
 
   void _searchProducts() {
@@ -72,7 +67,7 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: productProvider.isLoading
                   ? Center(child: CircularProgressIndicator())
-                  : _filteredProducts.isEmpty
+                  : productProvider.products.isEmpty
                       ? Center(
                           child: Text(
                             'No products found.',
@@ -84,9 +79,13 @@ class _HomePageState extends State<HomePage> {
                           ),
                         )
                       : ListView.builder(
-                          itemCount: _filteredProducts.length,
+                          itemCount: _filteredProducts.isEmpty
+                              ? productProvider.products.length
+                              : _filteredProducts.length,
                           itemBuilder: (context, index) {
-                            final product = _filteredProducts[index];
+                            final product = _filteredProducts.isEmpty
+                                ? productProvider.products[index]
+                                : _filteredProducts[index];
                             return GestureDetector(
                               onTap: () => Navigator.push(
                                 context,
