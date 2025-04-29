@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/product.dart';
 import '../services/local_storage_service.dart';
+import 'detail/detail_product.dart';
+import '../components/custom_card_cashier.dart';
 
 class CashierPage extends StatefulWidget {
   @override
@@ -43,29 +45,39 @@ class _CashierPageState extends State<CashierPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Cashier Product List'),
+        backgroundColor: Colors.blue, // Warna biru untuk AppBar
       ),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : _products.isEmpty
-              ? Center(child: Text('No products available.'))
-              : ListView.builder(
-                  itemCount: _products.length,
-                  itemBuilder: (context, index) {
-                    final product = _products[index];
-                    return ListTile(
-                      leading: Image.network(
-                        product.image,
-                        width: 50,
-                        height: 50,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Icon(Icons.broken_image, size: 50); // Show broken image icon
-                        },
-                      ),
-                      title: Text(product.title),
-                      subtitle: Text('\$${product.price.toStringAsFixed(2)}'),
-                    );
-                  },
-                ),
+      body: Container(
+        color: Colors.blue[50], // Latar belakang putih kebiruan
+        child: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : _products.isEmpty
+                ? Center(child: Text('No products available.'))
+                : GridView.builder(
+                    padding: EdgeInsets.all(16),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, // Dua kolom
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: 3 / 4, // Rasio aspek untuk kartu
+                    ),
+                    itemCount: _products.length,
+                    itemBuilder: (context, index) {
+                      final product = _products[index];
+                      return CustomCardCashier(
+                        title: product.title,
+                        subtitle: '\$${product.price.toStringAsFixed(2)}',
+                        imageUrl: product.image,
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DetailProductPage(product: product),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+      ),
     );
   }
 }

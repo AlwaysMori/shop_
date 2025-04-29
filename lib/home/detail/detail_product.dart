@@ -70,7 +70,6 @@ class DetailProductPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 10),
-            Divider(color: Colors.blue, thickness: 1), // Garis horizontal
             SizedBox(height: 10),
             Text(
               product.description,
