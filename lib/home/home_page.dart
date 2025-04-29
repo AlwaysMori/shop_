@@ -6,6 +6,7 @@ import '../components/custom_card.dart';
 import '../components/custom_product_form.dart';
 import '../components/custom_search_bar.dart';
 import '../home/detail/detail_product.dart';
+import '../auth/login_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -47,6 +48,12 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('Product List'),
         backgroundColor: Colors.blue,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () => _logout(context),
+          ),
+        ],
       ),
       body: Container(
         color: Colors.blue[50],
@@ -114,6 +121,14 @@ class _HomePageState extends State<HomePage> {
           },
         );
       },
+    );
+  }
+
+  void _logout(BuildContext context) {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+      (route) => false,
     );
   }
 }

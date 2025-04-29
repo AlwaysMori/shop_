@@ -4,6 +4,7 @@ import '../services/local_storage_service.dart';
 import 'detail/detail_product.dart';
 import '../components/custom_card_cashier.dart';
 import '../components/custom_search_bar.dart';
+import '../auth/login_page.dart';
 
 class CashierPage extends StatefulWidget {
   @override
@@ -59,6 +60,12 @@ class _CashierPageState extends State<CashierPage> {
       appBar: AppBar(
         title: Text('Cashier Product List'),
         backgroundColor: Colors.blue,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () => _logout(context),
+          ),
+        ],
       ),
       body: Container(
         color: Colors.blue[50],
@@ -102,6 +109,14 @@ class _CashierPageState extends State<CashierPage> {
           ],
         ),
       ),
+    );
+  }
+
+  void _logout(BuildContext context) {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+      (route) => false,
     );
   }
 }
