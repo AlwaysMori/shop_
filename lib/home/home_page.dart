@@ -4,6 +4,7 @@ import '../models/product.dart';
 import '../providers/product_provider.dart';
 import '../components/custom_card.dart';
 import '../components/custom_product_form.dart';
+import '../components/custom_search_bar.dart';
 import '../home/detail/detail_product.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,12 +13,30 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final TextEditingController _searchController = TextEditingController();
+  List<Product> _filteredProducts = [];
+
   @override
   void initState() {
     super.initState();
-    // Load products when the page is first opened
-    Future.microtask(() =>
-        Provider.of<ProductProvider>(context, listen: false).loadProducts());
+    Future.microtask(() {
+      final productProvider = Provider.of<ProductProvider>(context, listen: false);
+      productProvider.loadProducts().then((_) {
+        setState(() {
+          _filteredProducts = productProvider.products;
+        });
+      });
+    });
+  }
+
+  void _searchProducts() {
+    final query = _searchController.text.toLowerCase();
+    final productProvider = Provider.of<ProductProvider>(context, listen: false);
+    setState(() {
+      _filteredProducts = productProvider.products
+          .where((product) => product.title.toLowerCase().contains(query))
+          .toList();
+    });
   }
 
   @override
@@ -27,36 +46,48 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Product List'),
-        backgroundColor: Colors.blue, // Warna biru untuk AppBar
+        backgroundColor: Colors.blue,
       ),
       body: Container(
-        color: Colors.blue[50], // Latar belakang putih kebiruan
-        child: productProvider.isLoading
-            ? Center(child: CircularProgressIndicator())
-            : productProvider.products.isEmpty
-                ? Center(child: Text('No products available.'))
-                : ListView.builder(
-                    itemCount: productProvider.products.length,
-                    itemBuilder: (context, index) {
-                      final product = productProvider.products[index];
-                      return GestureDetector(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DetailProductPage(product: product),
-                          ),
+        color: Colors.blue[50],
+        child: Column(
+          children: [
+            CustomSearchBar(
+              controller: _searchController,
+              onSearch: _searchProducts,
+            ),
+            Expanded(
+              child: productProvider.isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : _filteredProducts.isEmpty
+                      ? Center(child: Text('No products found.'))
+                      : ListView.builder(
+                          itemCount: _filteredProducts.length,
+                          itemBuilder: (context, index) {
+                            final product = _filteredProducts[index];
+                            return GestureDetector(
+                              onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      DetailProductPage(product: product),
+                                ),
+                              ),
+                              child: CustomCard(
+                                title: product.title,
+                                subtitle: '\$${product.price.toStringAsFixed(2)}',
+                                imageUrl: product.image,
+                                onEdit: () =>
+                                    _showProductForm(context, product: product),
+                                onDelete: () =>
+                                    productProvider.deleteProduct(product.id),
+                              ),
+                            );
+                          },
                         ),
-                        child: CustomCard(
-                          title: product.title,
-                          subtitle: '\$${product.price.toStringAsFixed(2)}',
-                          imageUrl: product.image,
-                          onEdit: () => _showProductForm(context, product: product),
-                          onDelete: () =>
-                              productProvider.deleteProduct(product.id),
-                        ),
-                      );
-                    },
-                  ),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showProductForm(context),
