@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/product.dart';
 
-class CustomProductForm extends StatelessWidget {
+class CustomProductForm extends StatefulWidget {
   final Product? product;
   final void Function(Product) onSubmit;
 
@@ -11,117 +11,122 @@ class CustomProductForm extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final _titleController = TextEditingController(text: product?.title ?? '');
-    final _priceController =
-        TextEditingController(text: product?.price.toString() ?? '');
-    final _descriptionController =
-        TextEditingController(text: product?.description ?? '');
-    final _imageController =
-        TextEditingController(text: product?.image ?? '');
+  _CustomProductFormState createState() => _CustomProductFormState();
+}
 
+class _CustomProductFormState extends State<CustomProductForm> {
+  final _formKey = GlobalKey<FormState>();
+  late TextEditingController _titleController;
+  late TextEditingController _priceController;
+  late TextEditingController _descriptionController;
+  late TextEditingController _imageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController = TextEditingController(text: widget.product?.title ?? '');
+    _priceController = TextEditingController(
+        text: widget.product?.price.toString() ?? '');
+    _descriptionController =
+        TextEditingController(text: widget.product?.description ?? '');
+    _imageController =
+        TextEditingController(text: widget.product?.image ?? '');
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Colors.transparent, // Make background transparent
+      backgroundColor: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
-      contentPadding: EdgeInsets.zero, // Remove default padding
+      contentPadding: EdgeInsets.zero,
       content: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.blueGrey[100]!, Colors.blueGrey[300]!], // Gradient background
+            colors: [Colors.blueGrey[100]!, Colors.blueGrey[300]!],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black, // Solid black shadow
-              offset: Offset(4, 4), // Shadow on the right and bottom
-              blurRadius: 0, // No blur for solid shadow
+              color: Colors.black.withOpacity(0.2),
+              offset: Offset(4, 4),
+              blurRadius: 8,
             ),
           ],
           borderRadius: BorderRadius.circular(16),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                product == null ? 'Add Product' : 'Edit Product',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blueGrey[800], // Neutral text color
-                  fontFamily: 'Poppins', // Apply Poppins font
-                ),
-              ),
-              SizedBox(height: 16),
-              TextField(
-                controller: _titleController,
-                decoration: InputDecoration(
-                  labelText: 'Title',
-                  labelStyle: TextStyle(color: Colors.blueGrey[800]),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blueGrey[600]!),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blueGrey[400]!),
-                    borderRadius: BorderRadius.circular(8),
+          padding: const EdgeInsets.all(20.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  widget.product == null ? 'Add Product' : 'Edit Product',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blueGrey[800],
+                    fontFamily: 'Poppins',
                   ),
                 ),
-              ),
-              SizedBox(height: 16),
-              TextField(
-                controller: _priceController,
-                decoration: InputDecoration(
-                  labelText: 'Price',
-                  labelStyle: TextStyle(color: Colors.blueGrey[800]),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blueGrey[600]!),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blueGrey[400]!),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                SizedBox(height: 20),
+                _buildTextField(
+                  controller: _titleController,
+                  label: 'Title',
+                  icon: Icons.title,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Title is required';
+                    }
+                    return null;
+                  },
                 ),
-                keyboardType: TextInputType.number,
-              ),
-              SizedBox(height: 16),
-              TextField(
-                controller: _descriptionController,
-                decoration: InputDecoration(
-                  labelText: 'Description',
-                  labelStyle: TextStyle(color: Colors.blueGrey[800]),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blueGrey[600]!),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blueGrey[400]!),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                SizedBox(height: 16),
+                _buildTextField(
+                  controller: _priceController,
+                  label: 'Price',
+                  icon: Icons.attach_money,
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Price is required';
+                    }
+                    if (double.tryParse(value) == null) {
+                      return 'Enter a valid number';
+                    }
+                    return null;
+                  },
                 ),
-              ),
-              SizedBox(height: 16),
-              TextField(
-                controller: _imageController,
-                decoration: InputDecoration(
-                  labelText: 'Image URL',
-                  labelStyle: TextStyle(color: Colors.blueGrey[800]),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blueGrey[600]!),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blueGrey[400]!),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                SizedBox(height: 16),
+                _buildTextField(
+                  controller: _descriptionController,
+                  label: 'Description',
+                  icon: Icons.description,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Description is required';
+                    }
+                    return null;
+                  },
                 ),
-              ),
-            ],
+                SizedBox(height: 16),
+                _buildTextField(
+                  controller: _imageController,
+                  label: 'Image URL',
+                  icon: Icons.image,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Image URL is required';
+                    }
+                    return null;
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -130,33 +135,74 @@ class CustomProductForm extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
           child: Text(
             'Cancel',
-            style: TextStyle(color: Colors.blueGrey[800]), // Neutral text color
+            style: TextStyle(
+              color: Colors.blueGrey[800],
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         ElevatedButton(
           onPressed: () {
-            final newProduct = Product(
-              id: product?.id ?? 0,
-              title: _titleController.text,
-              price: double.tryParse(_priceController.text) ?? 0.0,
-              description: _descriptionController.text,
-              image: _imageController.text,
-            );
-            onSubmit(newProduct);
-            Navigator.pop(context);
+            if (_formKey.currentState!.validate()) {
+              final newProduct = Product(
+                id: widget.product?.id ?? 0,
+                title: _titleController.text,
+                price: double.tryParse(_priceController.text) ?? 0.0,
+                description: _descriptionController.text,
+                image: _imageController.text,
+              );
+              widget.onSubmit(newProduct);
+              Navigator.pop(context);
+            }
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blueGrey[600], // Neutral button color
+            backgroundColor: Colors.blueGrey[600],
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
           ),
           child: Text(
-            product == null ? 'Add' : 'Save',
+            widget.product == null ? 'Add' : 'Save',
             style: TextStyle(color: Colors.white),
           ),
         ),
       ],
     );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    TextInputType keyboardType = TextInputType.text,
+    String? Function(String?)? validator,
+  }) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(icon, color: Colors.blueGrey[600]),
+        labelStyle: TextStyle(color: Colors.blueGrey[800]),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.blueGrey[600]!),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.blueGrey[400]!),
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+      keyboardType: keyboardType,
+      validator: validator,
+    );
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _priceController.dispose();
+    _descriptionController.dispose();
+    _imageController.dispose();
+    super.dispose();
   }
 }
