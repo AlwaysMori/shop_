@@ -6,6 +6,7 @@ import '../components/custom_text_field.dart';
 import '../components/custom_button.dart';
 import '../components/page_title.dart';
 import '../components/responsive_padding.dart';
+import '../components/custom_dropdown.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -88,63 +89,74 @@ class _RegisterPageState extends State<RegisterPage> {
                   SizedBox(height: 100),
                   PageTitle(title: 'Register'),
                   SizedBox(height: 40),
-                  CustomTextField(
-                    controller: _usernameController,
-                    hintText: 'Username',
-                    icon: Icons.person,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a username';
-                      }
-                      return null;
-                    },
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 400),
+                    child: CustomTextField(
+                      controller: _usernameController,
+                      hintText: 'Username',
+                      icon: Icons.person,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a username';
+                        }
+                        return null;
+                      },
+                    ),
                   ),
                   SizedBox(height: 20),
-                  CustomTextField(
-                    controller: _passwordController,
-                    hintText: 'Password',
-                    icon: Icons.lock,
-                    obscureText: true,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a password';
-                      }
-                      return null;
-                    },
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 400),
+                    child: CustomTextField(
+                      controller: _passwordController,
+                      hintText: 'Password',
+                      icon: Icons.lock,
+                      obscureText: true,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a password';
+                        }
+                        return null;
+                      },
+                    ),
                   ),
                   SizedBox(height: 20),
-                  CustomTextField(
-                    controller: _nameController,
-                    hintText: 'Employee Name',
-                    icon: Icons.badge,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter the employee name';
-                      }
-                      return null;
-                    },
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 400),
+                    child: CustomTextField(
+                      controller: _nameController,
+                      hintText: 'Employee Name',
+                      icon: Icons.badge,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter the employee name';
+                        }
+                        return null;
+                      },
+                    ),
                   ),
                   SizedBox(height: 20),
-                  DropdownButtonFormField<String>(
-                    value: _position,
-                    items: ['Manager', 'Cashier']
-                        .map((position) => DropdownMenuItem(
-                              value: position,
-                              child: Text(position),
-                            ))
-                        .toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _position = value!;
-                      });
-                    },
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.blue[50],
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide.none,
-                      ),
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 400),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Jabatan:',
+                          style: TextStyle(fontSize: 16, color: Colors.blue),
+                        ),
+                        SizedBox(width: 16),
+                        Expanded(
+                          child: CustomDropdown<String>(
+                            value: _position,
+                            items: ['Manager', 'Cashier'],
+                            hintText: 'Select Position',
+                            onChanged: (value) {
+                              setState(() {
+                                _position = value!;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(height: 30),
