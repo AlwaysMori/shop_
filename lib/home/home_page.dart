@@ -109,8 +109,12 @@ class _HomePageState extends State<HomePage> {
                                 imageUrl: product.image,
                                 onEdit: () =>
                                     _showProductForm(context, product: product),
-                                onDelete: () =>
-                                    productProvider.deleteProduct(product.id),
+                                onDelete: () async {
+                                  await productProvider.deleteProduct(product.id);
+                                  setState(() {
+                                    _filteredProducts = productProvider.products;
+                                  });
+                                },
                               ),
                             );
                           },

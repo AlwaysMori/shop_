@@ -75,7 +75,7 @@ class ProductProvider extends ChangeNotifier {
       await _productService.deleteProduct(id);
       _products.removeWhere((product) => product.id == id);
       await _localStorageService.saveProducts(_products);
-      notifyListeners();
+      notifyListeners(); // Notify listeners after deletion
     } catch (e) {
       debugPrint('Failed to delete product: $e');
     }
