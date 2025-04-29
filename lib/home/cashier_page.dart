@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/product_provider.dart';
 import '../models/product.dart';
 import '../services/local_storage_service.dart';
 import 'detail/detail_product.dart';
@@ -17,13 +19,13 @@ class _CashierPageState extends State<CashierPage> {
   final TextEditingController _searchController = TextEditingController();
   List<Product> _products = [];
   List<Product> _filteredProducts = [];
-  List<Product> _cart = [];
   bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
     _loadProducts();
+    Provider.of<ProductProvider>(context, listen: false).loadCart();
   }
 
   Future<void> _loadProducts() async {
@@ -57,9 +59,7 @@ class _CashierPageState extends State<CashierPage> {
   }
 
   void _addToCart(Product product) {
-    setState(() {
-      _cart.add(product);
-    });
+    Provider.of<ProductProvider>(context, listen: false).addToCart(product);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('${product.title} added to cart!')),
     );
@@ -130,13 +130,13 @@ class _CashierPageState extends State<CashierPage> {
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => TotalPaymentPage(cart: _cart),
+                builder: (context) => TotalPaymentPage(),
               ),
             ),
             backgroundColor: Colors.blue,
             child: Icon(Icons.shopping_cart, color: Colors.white),
           ),
-          if (_cart.isNotEmpty)
+          if (Provider.of<ProductProvider>(context).cart.isNotEmpty)
             Positioned(
               right: 0,
               top: 0,
@@ -147,7 +147,7 @@ class _CashierPageState extends State<CashierPage> {
                   shape: BoxShape.circle,
                 ),
                 child: Text(
-                  '${_cart.length}',
+                  '${Provider.of<ProductProvider>(context).cart.length}',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 12,

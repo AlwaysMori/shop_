@@ -77,7 +77,9 @@ class CustomCardCashier extends StatelessWidget {
                 alignment: Alignment.bottomRight,
                 child: IconButton(
                   icon: Icon(Icons.add_shopping_cart, color: Colors.blue),
-                  onPressed: onAddToCart,
+                  onPressed: () {
+                    onAddToCart();
+                  },
                 ),
               ),
             ],

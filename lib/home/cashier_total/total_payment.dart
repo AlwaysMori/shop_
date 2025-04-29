@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../providers/product_provider.dart';
 import '../../models/product.dart';
 import '../../components/custom_total_payment_card.dart';
 import '../../components/custom_cart_card.dart';
 
 class TotalPaymentPage extends StatefulWidget {
-  final List<Product> cart;
-
-  const TotalPaymentPage({required this.cart});
-
   @override
   _TotalPaymentPageState createState() => _TotalPaymentPageState();
 }
@@ -18,27 +16,17 @@ class _TotalPaymentPageState extends State<TotalPaymentPage> {
   @override
   void initState() {
     super.initState();
-    _cart = List.from(widget.cart); // Copy the cart to allow modifications
+    _cart = List.from(
+        Provider.of<ProductProvider>(context, listen: false).cart); // Load cart
   }
 
-  void _removeFromCart(int index) {
+  void _removeFromCart(Product product) {
+    Provider.of<ProductProvider>(context, listen: false).deleteFromCart(product);
     setState(() {
-      _cart.removeAt(index);
+      _cart.removeWhere((item) => item.id == product.id); // Update local cart
     });
-  }
-
-  void _showTotalPaymentDialog() {
-    final total = _cart.fold(0.0, (sum, product) => sum + product.price);
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return CustomTotalPaymentCard(
-          totalItems: _cart.length,
-          totalPrice: total,
-          onComplete: _clearCart,
-        );
-      },
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('${product.title} removed from cart!')),
     );
   }
 
@@ -46,8 +34,23 @@ class _TotalPaymentPageState extends State<TotalPaymentPage> {
     setState(() {
       _cart.clear();
     });
+    Provider.of<ProductProvider>(context, listen: false).saveCart(_cart);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Payment completed, cart cleared!')),
+    );
+    Navigator.pop(context, _cart);
+  }
+
+  void _confirmPayment() {
+    showDialog(
+      context: context,
+      builder: (context) => CustomTotalPaymentCard(
+        totalItems: _cart.length,
+        totalPrice: _cart.fold(0.0, (sum, product) => sum + product.price),
+        onComplete: () {
+          _clearCart(); // Clear cart on completion
+        },
+      ),
     );
   }
 
@@ -61,7 +64,7 @@ class _TotalPaymentPageState extends State<TotalPaymentPage> {
         backgroundColor: Colors.blue,
       ),
       body: Container(
-        color: Colors.white, // Latar belakang putih
+        color: Colors.white,
         child: Column(
           children: [
             Expanded(
@@ -84,13 +87,13 @@ class _TotalPaymentPageState extends State<TotalPaymentPage> {
                           title: product.title,
                           subtitle: '\$${product.price.toStringAsFixed(2)}',
                           imageUrl: product.image,
-                          onRemove: () => _removeFromCart(index),
+                          onRemove: () => _removeFromCart(product), // Use updated method
                         );
                       },
                     ),
             ),
             Container(
-              color: Colors.blue[50], // Latar belakang putih kebiruan untuk section total
+              color: Colors.blue[50],
               padding: const EdgeInsets.all(16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -104,7 +107,7 @@ class _TotalPaymentPageState extends State<TotalPaymentPage> {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: _showTotalPaymentDialog,
+                    onPressed: _confirmPayment, // Show custom confirmation dialog
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
                       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -113,7 +116,7 @@ class _TotalPaymentPageState extends State<TotalPaymentPage> {
                       ),
                     ),
                     child: Text(
-                      'Show Total Payment',
+                      'Complete Payment',
                       style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ),

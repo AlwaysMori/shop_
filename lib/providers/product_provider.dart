@@ -9,9 +9,11 @@ class ProductProvider extends ChangeNotifier {
 
   List<Product> _products = [];
   bool _isLoading = false;
+  List<Product> _cart = [];
 
   List<Product> get products => _products;
   bool get isLoading => _isLoading;
+  List<Product> get cart => _cart;
 
   Future<void> loadProducts() async {
     _isLoading = true;
@@ -68,5 +70,36 @@ class ProductProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint('Failed to delete product: $e');
     }
+  }
+
+  Future<void> addToCart(Product product) async {
+    _cart.add(product);
+    await _localStorageService.saveCart(_cart);
+    notifyListeners();
+  }
+
+  Future<void> loadCart() async {
+    try {
+      _cart = await _localStorageService.getCart();
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Failed to load cart: $e');
+    }
+  }
+
+  Future<void> saveCart(List<Product> cart) async {
+    try {
+      await _localStorageService.saveCart(cart);
+      _cart = cart;
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Failed to save cart: $e');
+    }
+  }
+
+  Future<void> deleteFromCart(Product product) async {
+    _cart.removeWhere((item) => item.id == product.id);
+    await _localStorageService.saveCart(_cart);
+    notifyListeners();
   }
 }
