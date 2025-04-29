@@ -18,26 +18,33 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
       try {
-        final String? role = await _employeeService.getUserRole(
+        final bool isValid = await _employeeService.validateLogin(
           _usernameController.text.trim(),
           _passwordController.text.trim(),
         );
 
-        if (role != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Login successful!')),
+        if (isValid) {
+          final String? role = await _employeeService.getUserRole(
+            _usernameController.text.trim(),
+            _passwordController.text.trim(),
           );
 
-          if (role == 'Manager') {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
+          if (role != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Login successful!')),
             );
-          } else if (role == 'Cashier') {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => CashierPage()),
-            );
+
+            if (role == 'Manager') {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
+            } else if (role == 'Cashier') {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => CashierPage()),
+              );
+            }
           }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(

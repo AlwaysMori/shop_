@@ -4,6 +4,7 @@ import 'providers/product_provider.dart';
 import 'auth/login_page.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized(); // Tambahkan ini
   runApp(
     MultiProvider(
       providers: [
