@@ -4,6 +4,7 @@ import '../models/product.dart';
 import '../providers/product_provider.dart';
 import '../components/custom_card.dart';
 import '../components/custom_product_form.dart';
+import '../home/detail/detail_product.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -38,13 +39,21 @@ class _HomePageState extends State<HomePage> {
                     itemCount: productProvider.products.length,
                     itemBuilder: (context, index) {
                       final product = productProvider.products[index];
-                      return CustomCard(
-                        title: product.title,
-                        subtitle: '\$${product.price.toStringAsFixed(2)}',
-                        imageUrl: product.image,
-                        onEdit: () => _showProductForm(context, product: product),
-                        onDelete: () =>
-                            productProvider.deleteProduct(product.id),
+                      return GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DetailProductPage(product: product),
+                          ),
+                        ),
+                        child: CustomCard(
+                          title: product.title,
+                          subtitle: '\$${product.price.toStringAsFixed(2)}',
+                          imageUrl: product.image,
+                          onEdit: () => _showProductForm(context, product: product),
+                          onDelete: () =>
+                              productProvider.deleteProduct(product.id),
+                        ),
                       );
                     },
                   ),
