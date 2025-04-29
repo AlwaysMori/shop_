@@ -21,10 +21,25 @@ class _RegisterPageState extends State<RegisterPage> {
   String _position = 'Manager';
   final EmployeeService _employeeService = EmployeeService();
 
+  Future<bool> _isUsernameDuplicate(String username) async {
+    final List<Employee> employees = await _employeeService.getEmployees();
+    return employees.any((employee) => employee.username == username);
+  }
+
   Future<void> _saveEmployee() async {
     if (_formKey.currentState!.validate()) {
+      final String username = _usernameController.text.trim();
+
+      // Periksa apakah username sudah ada
+      if (await _isUsernameDuplicate(username)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Username already exists. Please choose another one.')),
+        );
+        return;
+      }
+
       final Employee newEmployee = Employee(
-        username: _usernameController.text.trim(),
+        username: username,
         password: _passwordController.text.trim(),
         name: _nameController.text.trim(),
         position: _position,
