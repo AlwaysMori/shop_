@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../models/product.dart';
 import '../providers/product_provider.dart';
 import '../components/custom_card.dart';
+import '../components/custom_product_form.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -25,103 +26,52 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Product List'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: productProvider.loadProducts,
-          ),
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => _showProductForm(context),
-          ),
-        ],
+        backgroundColor: Colors.blue, // Warna biru untuk AppBar
       ),
-      body: productProvider.isLoading
-          ? Center(child: CircularProgressIndicator())
-          : productProvider.products.isEmpty
-              ? Center(child: Text('No products available.'))
-              : ListView.builder(
-                  itemCount: productProvider.products.length,
-                  itemBuilder: (context, index) {
-                    final product = productProvider.products[index];
-                    return CustomCard(
-                      title: product.title,
-                      subtitle: '\$${product.price.toStringAsFixed(2)}',
-                      imageUrl: product.image,
-                      onEdit: () => _showProductForm(context, product: product),
-                      onDelete: () =>
-                          productProvider.deleteProduct(product.id),
-                    );
-                  },
-                ),
+      body: Container(
+        color: Colors.blue[50], // Latar belakang putih kebiruan
+        child: productProvider.isLoading
+            ? Center(child: CircularProgressIndicator())
+            : productProvider.products.isEmpty
+                ? Center(child: Text('No products available.'))
+                : ListView.builder(
+                    itemCount: productProvider.products.length,
+                    itemBuilder: (context, index) {
+                      final product = productProvider.products[index];
+                      return CustomCard(
+                        title: product.title,
+                        subtitle: '\$${product.price.toStringAsFixed(2)}',
+                        imageUrl: product.image,
+                        onEdit: () => _showProductForm(context, product: product),
+                        onDelete: () =>
+                            productProvider.deleteProduct(product.id),
+                      );
+                    },
+                  ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _showProductForm(context),
+        backgroundColor: Colors.blue,
+        child: Icon(Icons.add, color: Colors.white),
+      ),
     );
   }
 
   void _showProductForm(BuildContext context, {Product? product}) {
-    final _titleController = TextEditingController(text: product?.title ?? '');
-    final _priceController =
-        TextEditingController(text: product?.price.toString() ?? '');
-    final _descriptionController =
-        TextEditingController(text: product?.description ?? '');
-    final _imageController =
-        TextEditingController(text: product?.image ?? '');
-
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: Text(product == null ? 'Add Product' : 'Edit Product'),
-          content: SingleChildScrollView(
-            child: Column(
-              children: [
-                TextField(
-                  controller: _titleController,
-                  decoration: InputDecoration(labelText: 'Title'),
-                ),
-                TextField(
-                  controller: _priceController,
-                  decoration: InputDecoration(labelText: 'Price'),
-                  keyboardType: TextInputType.number,
-                ),
-                TextField(
-                  controller: _descriptionController,
-                  decoration: InputDecoration(labelText: 'Description'),
-                ),
-                TextField(
-                  controller: _imageController,
-                  decoration: InputDecoration(labelText: 'Image URL'),
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                final newProduct = Product(
-                  id: product?.id ?? 0,
-                  title: _titleController.text,
-                  price: double.parse(_priceController.text),
-                  description: _descriptionController.text,
-                  image: _imageController.text,
-                );
-
-                if (product == null) {
-                  Provider.of<ProductProvider>(context, listen: false)
-                      .addProduct(newProduct);
-                } else {
-                  Provider.of<ProductProvider>(context, listen: false)
-                      .updateProduct(newProduct);
-                }
-
-                Navigator.pop(context);
-              },
-              child: Text(product == null ? 'Add' : 'Save'),
-            ),
-          ],
+        return CustomProductForm(
+          product: product,
+          onSubmit: (newProduct) {
+            if (product == null) {
+              Provider.of<ProductProvider>(context, listen: false)
+                  .addProduct(newProduct);
+            } else {
+              Provider.of<ProductProvider>(context, listen: false)
+                  .updateProduct(newProduct);
+            }
+          },
         );
       },
     );

@@ -69,7 +69,7 @@ class CustomCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
-                  icon: Icon(Icons.edit, color: Colors.blue),
+                  icon: Icon(Icons.edit, color: const Color.fromARGB(255, 243, 222, 33)),
                   onPressed: onEdit,
                 ),
                 IconButton(
