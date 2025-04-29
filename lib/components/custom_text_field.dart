@@ -20,12 +20,12 @@ class CustomTextField extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.blueGrey[50], // Warna lebih lembut
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(0), // No corner radius
         boxShadow: [
           BoxShadow(
-            color: Colors.blueGrey.withOpacity(0.3), // Warna lebih lembut
+            color: Colors.black, // Solid black shadow
             offset: Offset(4, 4), // Shadow on the right and bottom
-            blurRadius: 6,
+            blurRadius: 0, // No blur for solid shadow
           ),
         ],
       ),
@@ -44,7 +44,7 @@ class CustomTextField extends StatelessWidget {
           filled: true,
           fillColor: Colors.transparent, // Transparent to match container color
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(0), // No corner radius
             borderSide: BorderSide.none,
           ),
         ),

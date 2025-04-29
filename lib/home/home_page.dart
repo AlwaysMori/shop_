@@ -46,8 +46,14 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Product List'),
-        backgroundColor: Colors.blue,
+        title: Text(
+          'Product List',
+          style: TextStyle(
+            fontFamily: 'Poppins', // Apply Poppins font
+            fontWeight: FontWeight.w300, // Light weight
+          ),
+        ),
+        backgroundColor: Colors.blueGrey, // Match login page theme
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
@@ -56,7 +62,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: Container(
-        color: Colors.blue[50],
+        color: const Color(0xFFB9C5C5), // Match login page background color
         child: Column(
           children: [
             CustomSearchBar(
@@ -67,7 +73,16 @@ class _HomePageState extends State<HomePage> {
               child: productProvider.isLoading
                   ? Center(child: CircularProgressIndicator())
                   : _filteredProducts.isEmpty
-                      ? Center(child: Text('No products found.'))
+                      ? Center(
+                          child: Text(
+                            'No products found.',
+                            style: TextStyle(
+                              fontFamily: 'Poppins', // Apply Poppins font
+                              fontWeight: FontWeight.w300, // Light weight
+                              color: Colors.blueGrey, // Match theme color
+                            ),
+                          ),
+                        )
                       : ListView.builder(
                           itemCount: _filteredProducts.length,
                           itemBuilder: (context, index) {
@@ -98,7 +113,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showProductForm(context),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.blueGrey, // Match login page theme
         child: Icon(Icons.add, color: Colors.white),
       ),
     );

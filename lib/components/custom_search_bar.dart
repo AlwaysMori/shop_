@@ -13,27 +13,37 @@ class CustomSearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: TextField(
-        controller: controller,
-        decoration: InputDecoration(
-          hintText: 'Search products...',
-          prefixIcon: Icon(Icons.search, color: Colors.blue),
-          filled: true,
-          fillColor: Colors.white,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: Colors.blue),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: Colors.blue),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: Colors.blue, width: 2),
-          ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.blueGrey[50], // Match theme background
+          borderRadius: BorderRadius.circular(0), // Square corners
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black, // Solid black shadow
+              offset: Offset(4, 4), // Shadow on the right and bottom
+              blurRadius: 0, // No blur for solid shadow
+            ),
+          ],
         ),
-        onSubmitted: (_) => onSearch(),
+        child: TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: 'Search products...',
+            hintStyle: TextStyle(
+              fontFamily: 'Poppins', // Apply Poppins font
+              fontWeight: FontWeight.w300, // Light weight
+              color: Colors.blueGrey, // Match theme color
+            ),
+            prefixIcon: Icon(Icons.search, color: Colors.blueGrey), // Match theme color
+            filled: true,
+            fillColor: Colors.transparent, // Transparent to match container color
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(0), // Square corners
+              borderSide: BorderSide.none,
+            ),
+          ),
+          onSubmitted: (_) => onSearch(),
+        ),
       ),
     );
   }

@@ -26,22 +26,14 @@ class _CustomButtonState extends State<CustomButton> {
         curve: Curves.easeInOut,
         decoration: BoxDecoration(
           color: Colors.blueGrey, // Warna lebih lembut
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: _isHovered
-              ? [
-                  BoxShadow(
-                    color: Colors.blueGrey.withOpacity(0.5), // Warna lebih lembut
-                    blurRadius: 10,
-                    offset: Offset(0, 4),
-                  ),
-                ]
-              : [
-                  BoxShadow(
-                    color: Colors.blueGrey.withOpacity(0.2), // Warna lebih lembut
-                    blurRadius: 4,
-                    offset: Offset(0, 2),
-                  ),
-                ],
+          borderRadius: BorderRadius.circular(0), // No corner radius
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black, // Solid black shadow
+              offset: Offset(4, 4), // Shadow on the right and bottom
+              blurRadius: 0, // No blur for solid shadow
+            ),
+          ],
         ),
         child: ElevatedButton(
           onPressed: widget.onPressed,
@@ -53,6 +45,7 @@ class _CustomButtonState extends State<CustomButton> {
             ),
             padding: EdgeInsets.symmetric(vertical: 15, horizontal: 40),
           ),
+          
           child: Text(
             widget.text,
             style: TextStyle(

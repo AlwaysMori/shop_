@@ -90,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFB9C5C5), // Match theme background color
+      backgroundColor: const Color(0xFFB9C5C5),
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
@@ -107,14 +107,14 @@ class _LoginPageState extends State<LoginPage> {
                     'LOGIN PAGE',
                     style: TextStyle(
                       fontSize: 32,
-                      fontWeight: FontWeight.w300, // Light weight
-                      color: Colors.blueGrey, // Match theme color
-                      fontFamily: 'Poppins', // Apply Poppins font
+                      fontWeight: FontWeight.w300, 
+                      color: Colors.blueGrey, 
+                      fontFamily: 'Poppins',
                     ),
                   ),
                   Image.asset(
-                    'assets/images/login.png', // Replace with your image path
-                    height: 250, // Adjust the height as needed
+                    'assets/images/login.png',
+                    height: 250, 
                   ),
                   SizedBox(height: 10),
                   ConstrainedBox(
@@ -149,20 +149,21 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   SizedBox(height: 30),
                   CustomButton(
-                    text: 'Login',
-                    onPressed: _login,
-                  ),
+                      text: 'Login',
+                      onPressed: _login,
+                    ),
+                  
                   SizedBox(height: 20),
                   TextButton(
                     onPressed: () => _navigateToRegisterPage(context),
                     child: Text(
                       "Don't have an account? Sign up",
                       style: TextStyle(
-                        color: Colors.blueGrey, // Match theme color
+                        color: Colors.blueGrey, 
                         fontWeight: FontWeight.w300,
-                        fontFamily: 'Poppins', // Apply Poppins font
-                      ),
+                        fontFamily: 'Poppins', 
                     ),
+                  ),
                   ),
                 ],
               ),
