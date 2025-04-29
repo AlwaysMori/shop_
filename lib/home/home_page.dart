@@ -21,7 +21,11 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     final productProvider = Provider.of<ProductProvider>(context, listen: false);
-    productProvider.loadProducts(); // Ensure products are loaded
+    productProvider.loadProducts().then((_) {
+      setState(() {
+        _filteredProducts = productProvider.products; // Initialize filtered products
+      });
+    });
     _searchController.addListener(_searchProducts); // Add listener for search
   }
 
@@ -38,6 +42,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final productProvider = Provider.of<ProductProvider>(context);
+
+    // Ensure _filteredProducts is updated when products change
+    if (_filteredProducts.isEmpty && productProvider.products.isNotEmpty) {
+      _filteredProducts = productProvider.products;
+    }
 
     return Scaffold(
       appBar: AppBar(
