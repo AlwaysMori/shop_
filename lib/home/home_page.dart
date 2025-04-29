@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/product.dart';
 import '../providers/product_provider.dart';
+import '../components/custom_card.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -43,32 +44,13 @@ class _HomePageState extends State<HomePage> {
                   itemCount: productProvider.products.length,
                   itemBuilder: (context, index) {
                     final product = productProvider.products[index];
-                    return ListTile(
-                      leading: Image.network(
-                        product.image,
-                        width: 50,
-                        height: 50,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Icon(Icons.broken_image, size: 50);
-                        },
-                      ),
-                      title: Text(product.title),
-                      subtitle: Text('\$${product.price.toStringAsFixed(2)}'),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.edit),
-                            onPressed: () =>
-                                _showProductForm(context, product: product),
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.delete),
-                            onPressed: () =>
-                                productProvider.deleteProduct(product.id),
-                          ),
-                        ],
-                      ),
+                    return CustomCard(
+                      title: product.title,
+                      subtitle: '\$${product.price.toStringAsFixed(2)}',
+                      imageUrl: product.image,
+                      onEdit: () => _showProductForm(context, product: product),
+                      onDelete: () =>
+                          productProvider.deleteProduct(product.id),
                     );
                   },
                 ),
