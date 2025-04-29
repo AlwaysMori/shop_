@@ -19,11 +19,11 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.blue[50],
+        color: Colors.blueGrey[50], // Warna lebih lembut
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.3),
+            color: Colors.blueGrey.withOpacity(0.3), // Warna lebih lembut
             offset: Offset(4, 4), // Shadow on the right and bottom
             blurRadius: 6,
           ),
@@ -35,7 +35,12 @@ class CustomTextField extends StatelessWidget {
         validator: validator,
         decoration: InputDecoration(
           hintText: hintText,
-          prefixIcon: Icon(icon, color: Colors.blue),
+          hintStyle: TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w300, // Apply Poppins font
+            color: Colors.blueGrey, // Match the icon color
+          ),
+          prefixIcon: Icon(icon, color: Colors.blueGrey), // Warna lebih lembut
           filled: true,
           fillColor: Colors.transparent, // Transparent to match container color
           border: OutlineInputBorder(

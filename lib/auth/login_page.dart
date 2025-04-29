@@ -90,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFB9C5C5), // Match theme background color
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
@@ -104,14 +104,19 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   SizedBox(height: 100),
                   Text(
-                    'Login',
+                    'LOGIN PAGE',
                     style: TextStyle(
                       fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
+                      fontWeight: FontWeight.w300, // Light weight
+                      color: Colors.blueGrey, // Match theme color
+                      fontFamily: 'Poppins', // Apply Poppins font
                     ),
                   ),
-                  SizedBox(height: 40),
+                  Image.asset(
+                    'assets/images/login.png', // Replace with your image path
+                    height: 250, // Adjust the height as needed
+                  ),
+                  SizedBox(height: 10),
                   ConstrainedBox(
                     constraints: BoxConstraints(maxWidth: 400),
                     child: CustomTextField(
@@ -152,7 +157,11 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () => _navigateToRegisterPage(context),
                     child: Text(
                       "Don't have an account? Sign up",
-                      style: TextStyle(color: Colors.blue),
+                      style: TextStyle(
+                        color: Colors.blueGrey, // Match theme color
+                        fontWeight: FontWeight.w300,
+                        fontFamily: 'Poppins', // Apply Poppins font
+                      ),
                     ),
                   ),
                 ],

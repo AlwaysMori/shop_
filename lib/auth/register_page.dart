@@ -100,7 +100,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFB9C5C5), // Match theme background color
       body: Center(
         child: SingleChildScrollView(
           child: ResponsivePadding(
@@ -110,8 +110,20 @@ class _RegisterPageState extends State<RegisterPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(height: 100),
-                  PageTitle(title: 'Register'),
-                  SizedBox(height: 40),
+                  Text(
+                    'REGISTER PAGE',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w300, // Light weight
+                      color: Colors.blueGrey, // Match theme color
+                      fontFamily: 'Poppins', // Apply Poppins font
+                    ),
+                  ),
+                  Image.asset(
+                    'assets/images/login.png', // Replace with your image path
+                    height: 200, // Adjust the height as needed
+                  ),
+                  SizedBox(height: 10),
                   ConstrainedBox(
                     constraints: BoxConstraints(maxWidth: 400),
                     child: CustomTextField(
@@ -164,7 +176,11 @@ class _RegisterPageState extends State<RegisterPage> {
                       children: [
                         Text(
                           'Jabatan:',
-                          style: TextStyle(fontSize: 16, color: Colors.blue),
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.blueGrey, // Match theme color
+                            fontFamily: 'Poppins', // Apply Poppins font
+                          ),
                         ),
                         SizedBox(width: 16),
                         Expanded(
@@ -192,7 +208,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     onPressed: () => _navigateToLoginPage(context),
                     child: Text(
                       'Already have an account? Login',
-                      style: TextStyle(color: Colors.blue),
+                      style: TextStyle(
+                        color: Colors.blueGrey, // Match theme color
+                        fontWeight: FontWeight.w300,
+                        fontFamily: 'Poppins', // Apply Poppins font
+                      ),
                     ),
                   ),
                 ],
