@@ -17,32 +17,42 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
-      final String? role = await _employeeService.getUserRole(
-        _usernameController.text,
-        _passwordController.text,
-      );
-
-      if (role != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Login successful!')),
+      try {
+        final String? role = await _employeeService.getUserRole(
+          _usernameController.text.trim(),
+          _passwordController.text.trim(),
         );
 
-        if (role == 'Manager') {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => HomePage()),
+        if (role != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Login successful!')),
           );
-        } else if (role == 'Cashier') {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => CashierPage()),
+
+          if (role == 'Manager') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          } else if (role == 'Cashier') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => CashierPage()),
+            );
+          }
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Invalid username or password')),
           );
         }
-      } else {
+      } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Invalid username or password')),
+          SnackBar(content: Text('Failed to login: $e')),
         );
       }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please fill out all fields correctly.')),
+      );
     }
   }
 

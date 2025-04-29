@@ -19,24 +19,40 @@ class _RegisterPageState extends State<RegisterPage> {
   Future<void> _saveEmployee() async {
     if (_formKey.currentState!.validate()) {
       final Employee newEmployee = Employee(
-        username: _usernameController.text,
-        password: _passwordController.text,
-        name: _nameController.text,
+        username: _usernameController.text.trim(),
+        password: _passwordController.text.trim(),
+        name: _nameController.text.trim(),
         position: _position,
       );
 
-      await _employeeService.saveEmployee(newEmployee);
+      try {
+        await _employeeService.saveEmployee(newEmployee);
 
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Employee registered successfully!')),
+        );
+
+        _usernameController.clear();
+        _passwordController.clear();
+        _nameController.clear();
+        setState(() {
+          _position = 'Manager';
+        });
+
+        // Navigate to login page after successful registration
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LoginPage()),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to register employee: $e')),
+        );
+      }
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Employee registered successfully!')),
+        SnackBar(content: Text('Please fill out all fields correctly.')),
       );
-
-      _usernameController.clear();
-      _passwordController.clear();
-      _nameController.clear();
-      setState(() {
-        _position = 'Manager';
-      });
     }
   }
 
