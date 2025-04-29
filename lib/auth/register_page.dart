@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import '../models/employee.dart';
 import '../services/employee_service.dart';
 import 'login_page.dart';
+import '../components/custom_text_field.dart';
+import '../components/custom_button.dart';
+import '../components/page_title.dart';
+import '../components/responsive_padding.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -39,7 +43,6 @@ class _RegisterPageState extends State<RegisterPage> {
           _position = 'Manager';
         });
 
-        // Navigate to login page after successful registration
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => LoginPage()),
@@ -56,81 +59,110 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
+  void _navigateToLoginPage(BuildContext context) {
+    Navigator.of(context).pushReplacement(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => LoginPage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Register Employee'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextFormField(
-                controller: _usernameController,
-                decoration: InputDecoration(labelText: 'Username'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a username';
-                  }
-                  return null;
-                },
+      backgroundColor: Colors.white,
+      body: Center(
+        child: SingleChildScrollView(
+          child: ResponsivePadding(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height: 100),
+                  PageTitle(title: 'Register'),
+                  SizedBox(height: 40),
+                  CustomTextField(
+                    controller: _usernameController,
+                    hintText: 'Username',
+                    icon: Icons.person,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a username';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  CustomTextField(
+                    controller: _passwordController,
+                    hintText: 'Password',
+                    icon: Icons.lock,
+                    obscureText: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a password';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  CustomTextField(
+                    controller: _nameController,
+                    hintText: 'Employee Name',
+                    icon: Icons.badge,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter the employee name';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  DropdownButtonFormField<String>(
+                    value: _position,
+                    items: ['Manager', 'Cashier']
+                        .map((position) => DropdownMenuItem(
+                              value: position,
+                              child: Text(position),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _position = value!;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.blue[50],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 30),
+                  CustomButton(
+                    text: 'Register',
+                    onPressed: _saveEmployee,
+                  ),
+                  SizedBox(height: 20),
+                  TextButton(
+                    onPressed: () => _navigateToLoginPage(context),
+                    child: Text(
+                      'Already have an account? Login',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ),
+                ],
               ),
-              TextFormField(
-                controller: _passwordController,
-                decoration: InputDecoration(labelText: 'Password'),
-                obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a password';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _nameController,
-                decoration: InputDecoration(labelText: 'Nama Pegawai'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the employee name';
-                  }
-                  return null;
-                },
-              ),
-              DropdownButtonFormField<String>(
-                value: _position,
-                items: ['Manager', 'Cashier']
-                    .map((position) => DropdownMenuItem(
-                          value: position,
-                          child: Text(position),
-                        ))
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _position = value!;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Position'),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _saveEmployee,
-                child: Text('Register'),
-              ),
-              SizedBox(height: 10),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                  );
-                },
-                child: Text('Punya akun? Login'),
-              ),
-            ],
+            ),
           ),
         ),
       ),
