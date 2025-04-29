@@ -25,6 +25,7 @@ class _HomePageState extends State<HomePage> {
     return isURL(url); // Validate only if it's a valid URL
   }
 
+//1. (Memanggil fetchProducts() dan memasukkan ke list)
   Future<void> _loadProducts() async {
     setState(() {
       _isLoading = true;
@@ -59,7 +60,8 @@ class _HomePageState extends State<HomePage> {
   Future<void> _saveProductsLocally() async {
     await _localStorageService.saveProducts(_products);
   }
-
+  
+//2.(Formulir untuk tambah produk)
   void _showProductForm({Product? product}) {
     final _titleController = TextEditingController(text: product?.title ?? '');
     final _priceController =
@@ -122,12 +124,12 @@ class _HomePageState extends State<HomePage> {
                   image: imageUrl,
                 );
 
-                try {
+                try {//3.(Formulir untuk tambah dan edit produk)
                   if (product == null) {
                     final addedProduct = await _productService.addProduct(newProduct);
                     setState(() {
                       _products.add(addedProduct);
-                    });
+                    }); 
                   } else {
                     await _productService.updateProduct(product.id, newProduct);
                     setState(() {
@@ -198,7 +200,7 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             icon: Icon(Icons.refresh),
             onPressed: _loadProducts,
-          ),
+          ), //2.(Untuk membuka form tambah produk)
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () => _showProductForm(),

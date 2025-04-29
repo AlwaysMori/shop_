@@ -5,6 +5,7 @@ import '../models/product.dart';
 class ProductService {
   final String baseUrl = 'https://fakestoreapi.com/products';
 
+//1.(Mengambil data produk dari API)
   Future<List<Product>> fetchProducts() async {
     final response = await http.get(Uri.parse(baseUrl));
     if (response.statusCode == 200) {
@@ -15,6 +16,7 @@ class ProductService {
     }
   }
 
+//2.(Kirim data produk baru ke API POST /products)
   Future<Product> addProduct(Product product) async {
     final response = await http.post(
       Uri.parse(baseUrl),
@@ -31,7 +33,8 @@ class ProductService {
       throw Exception('Failed to add product');
     }
   }
-
+  
+//3.Menggunakan PUT ke endpoint /products/:id untuk update data.
   Future<void> updateProduct(int id, Product product) async {
     final response = await http.put(
       Uri.parse('$baseUrl/$id'),
@@ -45,6 +48,7 @@ class ProductService {
     }
   }
 
+//4.Menggunakan DELETE ke endpoint /products/:id untuk menghapus data.
   Future<void> deleteProduct(int id) async {
     final response = await http.delete(Uri.parse('$baseUrl/$id'));
 

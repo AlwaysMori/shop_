@@ -1,3 +1,4 @@
+//1.(Untuk parsing data JSON API menjadi objek Dart)
 class Product {
   int id;
   String title;
