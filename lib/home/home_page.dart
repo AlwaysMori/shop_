@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:validators/validators.dart'; // Import for URL validation
+import 'package:provider/provider.dart';
 import '../models/product.dart';
-import '../services/product_service.dart';
-import '../services/local_storage_service.dart';
+import '../providers/product_provider.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -10,59 +9,73 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final ProductService _productService = ProductService();
-  final LocalStorageService _localStorageService = LocalStorageService();
-  List<Product> _products = [];
-  bool _isLoading = true;
-
   @override
   void initState() {
     super.initState();
-    _loadProducts();
+    // Load products when the page is first opened
+    Future.microtask(() =>
+        Provider.of<ProductProvider>(context, listen: false).loadProducts());
   }
 
-  bool isValidUrl(String url) {
-    return isURL(url); // Validate only if it's a valid URL
+  @override
+  Widget build(BuildContext context) {
+    final productProvider = Provider.of<ProductProvider>(context);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Product List'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: productProvider.loadProducts,
+          ),
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () => _showProductForm(context),
+          ),
+        ],
+      ),
+      body: productProvider.isLoading
+          ? Center(child: CircularProgressIndicator())
+          : productProvider.products.isEmpty
+              ? Center(child: Text('No products available.'))
+              : ListView.builder(
+                  itemCount: productProvider.products.length,
+                  itemBuilder: (context, index) {
+                    final product = productProvider.products[index];
+                    return ListTile(
+                      leading: Image.network(
+                        product.image,
+                        width: 50,
+                        height: 50,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(Icons.broken_image, size: 50);
+                        },
+                      ),
+                      title: Text(product.title),
+                      subtitle: Text('\$${product.price.toStringAsFixed(2)}'),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () =>
+                                _showProductForm(context, product: product),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () =>
+                                productProvider.deleteProduct(product.id),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+    );
   }
 
-//1. (Memanggil fetchProducts() dan memasukkan ke list)
-  Future<void> _loadProducts() async {
-    setState(() {
-      _isLoading = true;
-    });
-    try {
-      // Load products from local storage first
-      final localProducts = await _localStorageService.getProducts();
-      if (localProducts.isNotEmpty) {
-        setState(() {
-          _products = localProducts;
-        });
-      } else {
-        // If no local data, fetch from server
-        final fetchedProducts = await _productService.fetchProducts();
-        setState(() {
-          _products = fetchedProducts;
-        });
-        // Save fetched data to local storage
-        await _localStorageService.saveProducts(_products);
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load products: $e')),
-      );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  Future<void> _saveProductsLocally() async {
-    await _localStorageService.saveProducts(_products);
-  }
-  
-//2.(Formulir untuk tambah produk)
-  void _showProductForm({Product? product}) {
+  void _showProductForm(BuildContext context, {Product? product}) {
     final _titleController = TextEditingController(text: product?.title ?? '');
     final _priceController =
         TextEditingController(text: product?.price.toString() ?? '');
@@ -105,143 +118,30 @@ class _HomePageState extends State<HomePage> {
               child: Text('Cancel'),
             ),
             ElevatedButton(
-              onPressed: () async {
-                final imageUrl = _imageController.text;
-                if (!isValidUrl(imageUrl)) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Invalid image URL')),
-                  );
-                  return;
-                }
-
+              onPressed: () {
                 final newProduct = Product(
-                  id: product?.id ?? (_products.isNotEmpty
-                      ? _products.last.id + 1
-                      : 1), // Generate a unique ID
+                  id: product?.id ?? 0,
                   title: _titleController.text,
                   price: double.parse(_priceController.text),
                   description: _descriptionController.text,
-                  image: imageUrl,
+                  image: _imageController.text,
                 );
 
-                try {//3.(Formulir untuk tambah dan edit produk)
-                  if (product == null) {
-                    final addedProduct = await _productService.addProduct(newProduct);
-                    setState(() {
-                      _products.add(addedProduct);
-                    }); 
-                  } else {
-                    await _productService.updateProduct(product.id, newProduct);
-                    setState(() {
-                      final index = _products.indexWhere((p) => p.id == product.id);
-                      if (index != -1) {
-                        _products[index] = newProduct;
-                      }
-                    });
-                  }
-                  await _saveProductsLocally(); // Save updated products locally
-                  Navigator.pop(context);
-                } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Failed to save product: $e')),
-                  );
+                if (product == null) {
+                  Provider.of<ProductProvider>(context, listen: false)
+                      .addProduct(newProduct);
+                } else {
+                  Provider.of<ProductProvider>(context, listen: false)
+                      .updateProduct(newProduct);
                 }
+
+                Navigator.pop(context);
               },
               child: Text(product == null ? 'Add' : 'Save'),
             ),
           ],
         );
       },
-    );
-  }
-
-  void _deleteProduct(int id) async {
-    final confirm = await showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Delete Product'),
-          content: Text('Are you sure you want to delete this product?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: Text('Delete'),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (confirm == true) {
-      try {
-        await _productService.deleteProduct(id);
-        setState(() {
-          _products.removeWhere((product) => product.id == id);
-        });
-        await _saveProductsLocally(); // Save updated products locally
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to delete product: $e')),
-        );
-      }
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Product List'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: _loadProducts,
-          ), //2.(Untuk membuka form tambah produk)
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => _showProductForm(),
-          ),
-        ],
-      ),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : _products.isEmpty
-              ? Center(child: Text('No products available.'))
-              : ListView.builder(
-                  itemCount: _products.length,
-                  itemBuilder: (context, index) {
-                    final product = _products[index];
-                    return ListTile(
-                      leading: Image.network(
-                        product.image,
-                        width: 50,
-                        height: 50,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Icon(Icons.broken_image, size: 50);
-                        },
-                      ), // Show broken image icon
-                      title: Text(product.title),
-                      subtitle: Text('\$${product.price.toStringAsFixed(2)}'),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.edit),
-                            onPressed: () => _showProductForm(product: product),
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.delete),
-                            onPressed: () => _deleteProduct(product.id),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
     );
   }
 }

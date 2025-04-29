@@ -1,3 +1,4 @@
+import 'package:bank_lampung/auth/register_page.dart';
 import 'package:flutter/material.dart';
 import '../services/employee_service.dart';
 import '../home/home_page.dart'; // Import HomePage
@@ -83,6 +84,16 @@ class _LoginPageState extends State<LoginPage> {
               ElevatedButton(
                 onPressed: _login,
                 child: Text('Login'),
+              ),
+              SizedBox(height: 10),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => RegisterPage()),
+                  );
+                },
+                child: Text("Don't have an account? Register"),
               ),
             ],
           ),
