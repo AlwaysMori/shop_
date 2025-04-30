@@ -25,24 +25,33 @@ class CustomSearchBar extends StatelessWidget {
             ),
           ],
         ),
-        child: TextField(
-          controller: controller,
-          decoration: InputDecoration(
-            hintText: 'Search products...',
-            hintStyle: TextStyle(
-              fontFamily: 'Poppins', 
-              fontWeight: FontWeight.w300, 
-              color: Colors.blueGrey, 
-            ),
-            prefixIcon: Icon(Icons.search, color: Colors.blueGrey), 
-            filled: true,
-            fillColor: Colors.transparent, 
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(0),
-              borderSide: BorderSide.none,
+        child: Theme(
+          data: Theme.of(context).copyWith(
+            textSelectionTheme: TextSelectionThemeData(
+              cursorColor: Colors.blueGrey,
+              selectionHandleColor: Colors.blueGrey,
             ),
           ),
-          onSubmitted: (_) => onSearch(),
+          child: TextField(
+            controller: controller,
+            cursorColor: Colors.blueGrey, 
+            decoration: InputDecoration(
+              hintText: 'Search products...',
+              hintStyle: TextStyle(
+                fontFamily: 'Poppins', 
+                fontWeight: FontWeight.w300, 
+                color: Colors.blueGrey, 
+              ),
+              prefixIcon: Icon(Icons.search, color: Colors.blueGrey), 
+              filled: true,
+              fillColor: Colors.transparent, 
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(0),
+                borderSide: BorderSide.none,
+              ),
+            ),
+            onSubmitted: (_) => onSearch(),
+          ),
         ),
       ),
     );

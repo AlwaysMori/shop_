@@ -29,23 +29,32 @@ class CustomTextField extends StatelessWidget {
           ),
         ],
       ),
-      child: TextFormField(
-        controller: controller,
-        obscureText: obscureText,
-        validator: validator,
-        decoration: InputDecoration(
-          hintText: hintText,
-          hintStyle: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w300, 
-            color: Colors.blueGrey,
+      child: Theme(
+        data: Theme.of(context).copyWith(
+          textSelectionTheme: TextSelectionThemeData(
+            cursorColor: Colors.blueGrey,
+            selectionHandleColor: Colors.blueGrey,
           ),
-          prefixIcon: Icon(icon, color: Colors.blueGrey), 
-          filled: true,
-          fillColor: Colors.transparent, 
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(0), 
-            borderSide: BorderSide.none,
+        ),
+        child: TextFormField(
+          controller: controller,
+          obscureText: obscureText,
+          validator: validator,
+          cursorColor: Colors.blueGrey, 
+          decoration: InputDecoration(
+            hintText: hintText,
+            hintStyle: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w300, 
+              color: Colors.blueGrey,
+            ),
+            prefixIcon: Icon(icon, color: Colors.blueGrey), 
+            filled: true,
+            fillColor: Colors.transparent, 
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(0), 
+              borderSide: BorderSide.none,
+            ),
           ),
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Tambahkan ini untuk Clipboard
 import '../models/product.dart';
 
 class CustomProductForm extends StatefulWidget {
@@ -143,6 +144,12 @@ class _CustomProductFormState extends State<CustomProductForm> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.blueGrey[100], // Tambahkan background
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
               child: Text(
                 'Cancel',
                 style: TextStyle(
@@ -170,6 +177,7 @@ class _CustomProductFormState extends State<CustomProductForm> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
+                foregroundColor: Colors.white, // Pastikan teks tetap putih
               ),
               child: Text(
                 widget.product == null ? 'Add' : 'Save',
@@ -189,23 +197,47 @@ class _CustomProductFormState extends State<CustomProductForm> {
     TextInputType keyboardType = TextInputType.text,
     String? Function(String?)? validator,
   }) {
-    return TextFormField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon, color: Colors.blueGrey[600]),
-        labelStyle: TextStyle(color: Colors.blueGrey[800]),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.blueGrey[600]!),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.blueGrey[400]!),
-          borderRadius: BorderRadius.circular(8),
+    // Tambahkan logika khusus untuk Image URL
+    final isImageField = label == 'Image URL';
+    return Theme(
+      data: Theme.of(context).copyWith(
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: Colors.blueGrey[600],
+          selectionHandleColor: Colors.blueGrey[600],
         ),
       ),
-      keyboardType: keyboardType,
-      validator: validator,
+      child: TextFormField(
+        controller: controller,
+        cursorColor: Colors.blueGrey[600],
+        decoration: InputDecoration(
+          labelText: label,
+          prefixIcon: Icon(icon, color: Colors.blueGrey[600]),
+          labelStyle: TextStyle(color: Colors.blueGrey[800]),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.blueGrey[600]!),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.blueGrey[400]!),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          // Tambahkan icon paste jika field Image URL
+          suffixIcon: isImageField
+              ? IconButton(
+                  icon: Icon(Icons.paste, color: Colors.blueGrey[600]),
+                  tooltip: 'Paste from clipboard',
+                  onPressed: () async {
+                    final data = await Clipboard.getData('text/plain');
+                    if (data != null && data.text != null) {
+                      controller.text = data.text!;
+                    }
+                  },
+                )
+              : null,
+        ),
+        keyboardType: keyboardType,
+        validator: validator,
+      ),
     );
   }
 

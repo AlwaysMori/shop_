@@ -97,76 +97,80 @@ class _LoginPageState extends State<LoginPage> {
             padding: EdgeInsets.symmetric(
               horizontal: MediaQuery.of(context).size.width > 600 ? 200.0 : 24.0,
             ),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(height: 100),
-                  Text(
-                    'LOGIN PAGE',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w300, 
-                      color: Colors.blueGrey, 
-                      fontFamily: 'Poppins',
-                    ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: 100),
+                Text(
+                  'LOGIN PAGE',
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w300, 
+                    color: Colors.blueGrey, 
+                    fontFamily: 'Poppins',
                   ),
-                  Image.asset(
-                    'assets/images/login.png',
-                    height: 250, 
+                ),
+                Image.asset(
+                  'assets/images/login.png',
+                  height: 250, 
+                ),
+                SizedBox(height: 10),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: 400),
+                        child: CustomTextField(
+                          controller: _usernameController,
+                          hintText: 'Username',
+                          icon: Icons.person,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your username';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: 400),
+                        child: CustomTextField(
+                          controller: _passwordController,
+                          hintText: 'Password',
+                          icon: Icons.lock,
+                          obscureText: true,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your password';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 30),
+                      CustomButton(
+                        text: 'Login',
+                        onPressed: _login,
+                      ),
+                      SizedBox(height: 20),
+                      TextButton(
+                        onPressed: () => _navigateToRegisterPage(context),
+                        child: Text(
+                          "Don't have an account? Sign up",
+                          style: TextStyle(
+                            color: Colors.blueGrey, 
+                            fontWeight: FontWeight.w300,
+                            fontFamily: 'Poppins', 
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 10),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 400),
-                    child: CustomTextField(
-                      controller: _usernameController,
-                      hintText: 'Username',
-                      icon: Icons.person,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your username';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 400),
-                    child: CustomTextField(
-                      controller: _passwordController,
-                      hintText: 'Password',
-                      icon: Icons.lock,
-                      obscureText: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  SizedBox(height: 30),
-                  CustomButton(
-                      text: 'Login',
-                      onPressed: _login,
-                    ),
-                  
-                  SizedBox(height: 20),
-                  TextButton(
-                    onPressed: () => _navigateToRegisterPage(context),
-                    child: Text(
-                      "Don't have an account? Sign up",
-                      style: TextStyle(
-                        color: Colors.blueGrey, 
-                        fontWeight: FontWeight.w300,
-                        fontFamily: 'Poppins', 
-                    ),
-                  ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

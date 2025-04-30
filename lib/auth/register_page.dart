@@ -118,119 +118,130 @@ class _RegisterPageState extends State<RegisterPage> {
       body: Center(
         child: SingleChildScrollView(
           child: ResponsivePadding(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(height: 100),
-                  Text(
-                    'REGISTER PAGE',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w300,
-                      color: Colors.blueGrey,
-                      fontFamily: 'Poppins',
-                    ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: 100),
+                Text(
+                  'REGISTER PAGE',
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.blueGrey,
+                    fontFamily: 'Poppins',
                   ),
-                  Image.asset(
-                    'assets/images/login.png',
-                    height: 200,
-                  ),
-                  SizedBox(height: 10),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 400),
-                    child: CustomTextField(
-                      controller: _usernameController,
-                      hintText: 'Username',
-                      icon: Icons.person,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a username';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 400),
-                    child: CustomTextField(
-                      controller: _passwordController,
-                      hintText: 'Password',
-                      icon: Icons.lock,
-                      obscureText: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a password';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 400),
-                    child: CustomTextField(
-                      controller: _nameController,
-                      hintText: 'Employee Name',
-                      icon: Icons.badge,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter the employee name';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 400),
-                    child: Row(
-                      children: [
-                        Text(
-                          'Jabatan:',
+                ),
+                Image.asset(
+                  'assets/images/login.png',
+                  height: 200,
+                ),
+                SizedBox(height: 10),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: 400),
+                        child: CustomTextField(
+                          controller: _usernameController,
+                          hintText: 'Username',
+                          icon: Icons.person,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter a username';
+                            }
+                            if (value.length < 6) {
+                              return 'Username must be at least 6 characters';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: 400),
+                        child: CustomTextField(
+                          controller: _passwordController,
+                          hintText: 'Password',
+                          icon: Icons.lock,
+                          obscureText: true,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter a password';
+                            }
+                            if (!RegExp(r'[0-9]').hasMatch(value)) {
+                              return 'Password must contain at least one number';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: 400),
+                        child: CustomTextField(
+                          controller: _nameController,
+                          hintText: 'Employee Name',
+                          icon: Icons.badge,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter the employee name';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: 400),
+                        child: Row(
+                          children: [
+                            Text(
+                              'Jabatan:',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.blueGrey,
+                                fontFamily: 'Poppins',
+                              ),
+                            ),
+                            SizedBox(width: 16),
+                            Expanded(
+                              child: CustomDropdown<String>(
+                                value: _position,
+                                items: ['Manager', 'Cashier'],
+                                hintText: 'Select Position',
+                                onChanged: (value) {
+                                  setState(() {
+                                    _position = value!;
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 30),
+                      CustomButton(
+                        text: 'Register',
+                        onPressed: _saveEmployee,
+                      ),
+                      SizedBox(height: 20),
+                      TextButton(
+                        onPressed: () => _navigateToLoginPage(context),
+                        child: Text(
+                          'Already have an account? Login',
                           style: TextStyle(
-                            fontSize: 16,
                             color: Colors.blueGrey,
+                            fontWeight: FontWeight.w300,
                             fontFamily: 'Poppins',
                           ),
                         ),
-                        SizedBox(width: 16),
-                        Expanded(
-                          child: CustomDropdown<String>(
-                            value: _position,
-                            items: ['Manager', 'Cashier'],
-                            hintText: 'Select Position',
-                            onChanged: (value) {
-                              setState(() {
-                                _position = value!;
-                              });
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 30),
-                  CustomButton(
-                    text: 'Register',
-                    onPressed: _saveEmployee,
-                  ),
-                  SizedBox(height: 20),
-                  TextButton(
-                    onPressed: () => _navigateToLoginPage(context),
-                    child: Text(
-                      'Already have an account? Login',
-                      style: TextStyle(
-                        color: Colors.blueGrey,
-                        fontWeight: FontWeight.w300,
-                        fontFamily: 'Poppins',
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
