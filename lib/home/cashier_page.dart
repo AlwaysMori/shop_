@@ -104,35 +104,47 @@ class _CashierPageState extends State<CashierPage> {
                               child: Text(
                                 'No products found.',
                                 style: TextStyle(
-                                  fontFamily: 'Poppins', 
-                                  fontWeight: FontWeight.w300, 
-                                  color: Colors.blueGrey, 
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.blueGrey,
                                 ),
                               ),
                             )
-                          : GridView.builder(
-                              padding: EdgeInsets.all(16),
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 16,
-                                mainAxisSpacing: 16,
-                                childAspectRatio: 4 / 6,
-                              ),
-                              itemCount: _filteredProducts.length,
-                              itemBuilder: (context, index) {
-                                final product = _filteredProducts[index];
-                                return CustomCardCashier(
-                                  title: product.title,
-                                  subtitle: '\$${product.price.toStringAsFixed(2)}',
-                                  imageUrl: product.image,
-                                  onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          DetailProductPage(product: product),
-                                    ),
+                          : LayoutBuilder(
+                              builder: (context, constraints) {
+                                int crossAxisCount = 2; // Default to 2 cards per row
+                                if (constraints.maxWidth > 1600) {
+                                  crossAxisCount = 8; // Desktop screens show 8 cards per row
+                                } else if (constraints.maxWidth > 1200) {
+                                  crossAxisCount = 4; // Larger screens show 4 cards per row
+                                } else if (constraints.maxWidth > 800) {
+                                  crossAxisCount = 3; // Medium screens show 3 cards per row
+                                }
+                                return GridView.builder(
+                                  padding: EdgeInsets.all(16),
+                                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: crossAxisCount,
+                                    crossAxisSpacing: 16,
+                                    mainAxisSpacing: 16,
+                                    childAspectRatio: 4 / 6,
                                   ),
-                                  onAddToCart: () => _addToCart(product),
+                                  itemCount: _filteredProducts.length,
+                                  itemBuilder: (context, index) {
+                                    final product = _filteredProducts[index];
+                                    return CustomCardCashier(
+                                      title: product.title,
+                                      subtitle: '\$${product.price.toStringAsFixed(2)}',
+                                      imageUrl: product.image,
+                                      onTap: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              DetailProductPage(product: product),
+                                        ),
+                                      ),
+                                      onAddToCart: () => _addToCart(product),
+                                    );
+                                  },
                                 );
                               },
                             ),

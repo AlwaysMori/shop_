@@ -35,138 +35,150 @@ class _CustomProductFormState extends State<CustomProductForm> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: Colors.transparent,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      contentPadding: EdgeInsets.zero,
-      content: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.blueGrey[100]!, Colors.blueGrey[300]!],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        bool isDesktop = constraints.maxWidth > 600;
+        return AlertDialog(
+          backgroundColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              offset: Offset(4, 4),
-              blurRadius: 8,
-            ),
-          ],
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  widget.product == null ? 'Add Product' : 'Edit Product',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blueGrey[800],
-                    fontFamily: 'Poppins',
-                  ),
-                ),
-                SizedBox(height: 20),
-                _buildTextField(
-                  controller: _titleController,
-                  label: 'Title',
-                  icon: Icons.title,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Title is required';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16),
-                _buildTextField(
-                  controller: _priceController,
-                  label: 'Price',
-                  icon: Icons.attach_money,
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Price is required';
-                    }
-                    if (double.tryParse(value) == null) {
-                      return 'Enter a valid number';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16),
-                _buildTextField(
-                  controller: _descriptionController,
-                  label: 'Description',
-                  icon: Icons.description,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Description is required';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16),
-                _buildTextField(
-                  controller: _imageController,
-                  label: 'Image URL',
-                  icon: Icons.image,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Image URL is required';
-                    }
-                    return null;
-                  },
+          contentPadding: EdgeInsets.zero,
+          content: Container(
+            width: isDesktop ? 500 : double.infinity, // Adjust width for desktop
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.blueGrey[100]!, Colors.blueGrey[300]!],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  offset: Offset(4, 4),
+                  blurRadius: 8,
                 ),
               ],
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      widget.product == null ? 'Add Product' : 'Edit Product',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blueGrey[800],
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    _buildTextField(
+                      controller: _titleController,
+                      label: 'Title',
+                      icon: Icons.title,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Title is required';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    _buildTextField(
+                      controller: _priceController,
+                      label: 'Price',
+                      icon: Icons.attach_money,
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Price is required';
+                        }
+                        final price = double.tryParse(value);
+                        if (price == null || price <= 0) {
+                          return 'Enter a valid positive number';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    _buildTextField(
+                      controller: _descriptionController,
+                      label: 'Description',
+                      icon: Icons.description,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Description is required';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    _buildTextField(
+                      controller: _imageController,
+                      label: 'Image URL',
+                      icon: Icons.image,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Image URL is required';
+                        }
+                        final urlPattern = r'^(https?:\/\/)?([\w\-])+\.{1}([a-zA-Z]{2,63})([\/\w\.-]*)*\/?$';
+                        final isValidUrl = RegExp(urlPattern).hasMatch(value);
+                        if (!isValidUrl) {
+                          return 'Enter a valid URL';
+                        }
+                        return null;
+                      },
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(
-            'Cancel',
-            style: TextStyle(
-              color: Colors.blueGrey[800],
-              fontWeight: FontWeight.bold,
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  color: Colors.blueGrey[800],
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
-          ),
-        ),
-        ElevatedButton(
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              final newProduct = Product(
-                id: widget.product?.id ?? 0,
-                title: _titleController.text,
-                price: double.tryParse(_priceController.text) ?? 0.0,
-                description: _descriptionController.text,
-                image: _imageController.text,
-              );
-              widget.onSubmit(newProduct);
-              Navigator.pop(context);
-            }
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blueGrey[600],
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+            ElevatedButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  final newProduct = Product(
+                    id: widget.product?.id ?? 0,
+                    title: _titleController.text,
+                    price: double.tryParse(_priceController.text) ?? 0.0,
+                    description: _descriptionController.text,
+                    image: _imageController.text,
+                  );
+                  widget.onSubmit(newProduct);
+                  Navigator.pop(context);
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueGrey[600],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: Text(
+                widget.product == null ? 'Add' : 'Save',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
-          ),
-          child: Text(
-            widget.product == null ? 'Add' : 'Save',
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 

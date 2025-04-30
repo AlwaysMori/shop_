@@ -19,33 +19,85 @@ class DetailProductPage extends StatelessWidget {
         ),
         backgroundColor: Colors.blueGrey, // Match home page theme
       ),
-      body: Container(
-        color: const Color(0xFFB9C5C5), // Match home page background color
-        padding: EdgeInsets.all(16.0),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          bool isDesktop = constraints.maxWidth > 600;
+          return Container(
+            color: const Color(0xFFB9C5C5), // Match home page background color
+            padding: EdgeInsets.all(16.0),
+            child: isDesktop
+                ? Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Center(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(0), // Square corners
+                            child: AspectRatio(
+                              aspectRatio: 16 / 9,
+                              child: Image.network(
+                                product.image,
+                                fit: BoxFit.contain,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    color: Colors.grey[300],
+                                    child: Center(
+                                      child: Icon(Icons.broken_image, size: 100, color: Colors.grey),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 20),
+                      Expanded(
+                        flex: 2,
+                        child: _buildProductDetails(),
+                      ),
+                    ],
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(0), // Square corners
+                          child: AspectRatio(
+                            aspectRatio: 16 / 9,
+                            child: Image.network(
+                              product.image,
+                              fit: BoxFit.contain,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  color: Colors.grey[300],
+                                  child: Center(
+                                    child: Icon(Icons.broken_image, size: 100, color: Colors.grey),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      _buildProductDetails(),
+                    ],
+                  ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildProductDetails() {
+    return Expanded(
+      child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(0), // Square corners
-                child: AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: Image.network(
-                    product.image,
-                    fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        color: Colors.grey[300],
-                        child: Center(
-                          child: Icon(Icons.broken_image, size: 100, color: Colors.grey),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
             Text(
               product.title,
               style: TextStyle(
