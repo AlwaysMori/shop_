@@ -77,7 +77,7 @@ class _CashierPageState extends State<CashierPage> {
             fontWeight: FontWeight.w300, // Light weight
           ),
         ),
-        backgroundColor: Colors.blueGrey, // Match home page theme
+        backgroundColor: Colors.blueGrey, 
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
@@ -85,57 +85,60 @@ class _CashierPageState extends State<CashierPage> {
           ),
         ],
       ),
-      body: SafeArea(
-        child: Container(
-          color: const Color(0xFFB9C5C5), // Match home page background color
-          child: Column(
-            children: [
-              CustomSearchBar(
-                controller: _searchController,
-                onSearch: _searchProducts,
-              ),
-              Flexible(
-                child: _isLoading
-                    ? Center(child: CircularProgressIndicator())
-                    : _filteredProducts.isEmpty
-                        ? Center(
-                            child: Text(
-                              'No products found.',
-                              style: TextStyle(
-                                fontFamily: 'Poppins', // Apply Poppins font
-                                fontWeight: FontWeight.w300, // Light weight
-                                color: Colors.blueGrey, // Match theme color
-                              ),
-                            ),
-                          )
-                        : GridView.builder(
-                            padding: EdgeInsets.all(16),
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 16,
-                              mainAxisSpacing: 16,
-                              childAspectRatio: 4 / 6,
-                            ),
-                            itemCount: _filteredProducts.length,
-                            itemBuilder: (context, index) {
-                              final product = _filteredProducts[index];
-                              return CustomCardCashier(
-                                title: product.title,
-                                subtitle: '\$${product.price.toStringAsFixed(2)}',
-                                imageUrl: product.image,
-                                onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        DetailProductPage(product: product),
-                                  ),
+      body: RefreshIndicator(
+        onRefresh: _loadProducts, // Reload products
+        child: SafeArea(
+          child: Container(
+            color: const Color(0xFFB9C5C5), 
+            child: Column(
+              children: [
+                CustomSearchBar(
+                  controller: _searchController,
+                  onSearch: _searchProducts,
+                ),
+                Flexible(
+                  child: _isLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : _filteredProducts.isEmpty
+                          ? Center(
+                              child: Text(
+                                'No products found.',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins', 
+                                  fontWeight: FontWeight.w300, 
+                                  color: Colors.blueGrey, 
                                 ),
-                                onAddToCart: () => _addToCart(product),
-                              );
-                            },
-                          ),
-              ),
-            ],
+                              ),
+                            )
+                          : GridView.builder(
+                              padding: EdgeInsets.all(16),
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 16,
+                                mainAxisSpacing: 16,
+                                childAspectRatio: 4 / 6,
+                              ),
+                              itemCount: _filteredProducts.length,
+                              itemBuilder: (context, index) {
+                                final product = _filteredProducts[index];
+                                return CustomCardCashier(
+                                  title: product.title,
+                                  subtitle: '\$${product.price.toStringAsFixed(2)}',
+                                  imageUrl: product.image,
+                                  onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          DetailProductPage(product: product),
+                                    ),
+                                  ),
+                                  onAddToCart: () => _addToCart(product),
+                                );
+                              },
+                            ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -148,7 +151,7 @@ class _CashierPageState extends State<CashierPage> {
                 builder: (context) => TotalPaymentPage(),
               ),
             ),
-            backgroundColor: Colors.blueGrey, // Match home page theme
+            backgroundColor: Colors.blueGrey, 
             child: Icon(Icons.shopping_cart, color: Colors.white),
           ),
           if (Provider.of<ProductProvider>(context).cart.isNotEmpty)

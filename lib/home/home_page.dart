@@ -65,66 +65,76 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: Container(
-        color: const Color(0xFFB9C5C5), // Match login page background color
-        child: Column(
-          children: [
-            CustomSearchBar(
-              controller: _searchController,
-              onSearch: _searchProducts,
-            ),
-            Expanded(
-              child: productProvider.isLoading
-                  ? Center(child: CircularProgressIndicator())
-                  : productProvider.products.isEmpty
-                      ? Center(
-                          child: Text(
-                            'No products found.',
-                            style: TextStyle(
-                              fontFamily: 'Poppins', // Apply Poppins font
-                              fontWeight: FontWeight.w300, // Light weight
-                              color: Colors.blueGrey, // Match theme color
+      body: RefreshIndicator(
+        color: Colors.white, 
+        backgroundColor: Colors.blueGrey, 
+        onRefresh: () async {
+          await productProvider.loadProducts(); 
+          setState(() {
+            _filteredProducts = productProvider.products;
+          });
+        },
+        child: Container(
+          color: const Color(0xFFB9C5C5), // Match login page background color
+          child: Column(
+            children: [
+              CustomSearchBar(
+                controller: _searchController,
+                onSearch: _searchProducts,
+              ),
+              Expanded(
+                child: productProvider.isLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : productProvider.products.isEmpty
+                        ? Center(
+                            child: Text(
+                              'No products found.',
+                              style: TextStyle(
+                                fontFamily: 'Poppins', 
+                                fontWeight: FontWeight.w300, // Light weight
+                                color: Colors.blueGrey, 
+                              ),
                             ),
-                          ),
-                        )
-                      : ListView.builder(
-                          itemCount: _filteredProducts.isEmpty
-                              ? productProvider.products.length
-                              : _filteredProducts.length,
-                          itemBuilder: (context, index) {
-                            final product = _filteredProducts.isEmpty
-                                ? productProvider.products[index]
-                                : _filteredProducts[index];
-                            return GestureDetector(
-                              onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      DetailProductPage(product: product),
+                          )
+                        : ListView.builder(
+                            itemCount: _filteredProducts.isEmpty
+                                ? productProvider.products.length
+                                : _filteredProducts.length,
+                            itemBuilder: (context, index) {
+                              final product = _filteredProducts.isEmpty
+                                  ? productProvider.products[index]
+                                  : _filteredProducts[index];
+                              return GestureDetector(
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        DetailProductPage(product: product),
+                                  ),
                                 ),
-                              ),
-                              child: CustomCard(
-                                title: product.title,
-                                subtitle: '\$${product.price.toStringAsFixed(2)}',
-                                imageUrl: product.image,
-                                onDelete: () async {
-                                  await productProvider.deleteProduct(product.id); // Hapus berdasarkan ID unik
-                                  setState(() {
-                                    _filteredProducts = productProvider.products;
-                                  });
-                                },
-                                onEdit: () => _showProductForm(context, product: product), // Edit berdasarkan produk yang dipilih
-                              ),
-                            );
-                          },
-                        ),
-            ),
-          ],
+                                child: CustomCard(
+                                  title: product.title,
+                                  subtitle: '\$${product.price.toStringAsFixed(2)}',
+                                  imageUrl: product.image,
+                                  onDelete: () async {
+                                    await productProvider.deleteProduct(product.id); // Hapus berdasarkan ID unik
+                                    setState(() {
+                                      _filteredProducts = productProvider.products;
+                                    });
+                                  },
+                                  onEdit: () => _showProductForm(context, product: product), // Edit berdasarkan produk yang dipilih
+                                ),
+                              );
+                            },
+                          ),
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showProductForm(context),
-        backgroundColor: Colors.blueGrey, // Match login page theme
+        backgroundColor: Colors.blueGrey, 
         child: Icon(Icons.add, color: Colors.white),
       ),
     );
