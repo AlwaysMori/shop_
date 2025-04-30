@@ -107,14 +107,13 @@ class _HomePageState extends State<HomePage> {
                                 title: product.title,
                                 subtitle: '\$${product.price.toStringAsFixed(2)}',
                                 imageUrl: product.image,
-                                onEdit: () =>
-                                    _showProductForm(context, product: product),
                                 onDelete: () async {
-                                  await productProvider.deleteProduct(product.id);
+                                  await productProvider.deleteProduct(product.id); // Hapus berdasarkan ID unik
                                   setState(() {
                                     _filteredProducts = productProvider.products;
                                   });
                                 },
+                                onEdit: () => _showProductForm(context, product: product), // Edit berdasarkan produk yang dipilih
                               ),
                             );
                           },

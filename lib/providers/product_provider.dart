@@ -48,6 +48,12 @@ class ProductProvider extends ChangeNotifier {
   Future<void> addProduct(Product product) async {
     try {
       final addedProduct = await _productService.addProduct(product);
+
+      // Pastikan produk memiliki ID unik
+      if (_products.any((p) => p.id == addedProduct.id)) {
+        addedProduct.id = DateTime.now().millisecondsSinceEpoch; // Tetapkan ID unik jika duplikat
+      }
+
       _products.add(addedProduct);
       await _localStorageService.saveProducts(_products);
       notifyListeners();
@@ -59,6 +65,8 @@ class ProductProvider extends ChangeNotifier {
   Future<void> updateProduct(Product product) async {
     try {
       await _productService.updateProduct(product.id, product);
+
+      // Perbarui produk berdasarkan ID
       final index = _products.indexWhere((p) => p.id == product.id);
       if (index != -1) {
         _products[index] = product;
@@ -73,9 +81,11 @@ class ProductProvider extends ChangeNotifier {
   Future<void> deleteProduct(int id) async {
     try {
       await _productService.deleteProduct(id);
+
+      // Hapus produk berdasarkan ID
       _products.removeWhere((product) => product.id == id);
       await _localStorageService.saveProducts(_products);
-      notifyListeners(); // Notify listeners after deletion
+      notifyListeners();
     } catch (e) {
       debugPrint('Failed to delete product: $e');
     }

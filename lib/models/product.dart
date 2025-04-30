@@ -16,11 +16,11 @@ class Product {
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
-      id: json['id'] ?? 0, // Default to 0 if id is null
-      title: json['title'] ?? '', // Default to empty string if title is null
-      price: (json['price'] ?? 0).toDouble(), // Default to 0.0 if price is null
-      description: json['description'] ?? '', // Default to empty string
-      image: json['image'] ?? '', // Default to empty string
+      id: json['id'] ?? DateTime.now().millisecondsSinceEpoch, // Gunakan timestamp jika ID null
+      title: json['title'] ?? '',
+      price: (json['price'] ?? 0).toDouble(),
+      description: json['description'] ?? '',
+      image: json['image'] ?? '',
     );
   }
 

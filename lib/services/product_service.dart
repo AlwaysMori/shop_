@@ -25,11 +25,12 @@ class ProductService {
     );
 
     if (response.statusCode == 201 || response.statusCode == 200) {
-      // Parse the response body to create a Product object
       final Map<String, dynamic> responseData = jsonDecode(response.body);
+
+      // Pastikan ID diberikan, jika tidak, tetapkan ID lokal
       return Product.fromJson(responseData);
     } else {
-      print('Failed to add product: ${response.body}'); // Log the error response
+      print('Failed to add product: ${response.body}');
       throw Exception('Failed to add product');
     }
   }
