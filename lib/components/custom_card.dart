@@ -89,7 +89,59 @@ class CustomCard extends StatelessWidget {
                   ),
                   IconButton(
                     icon: Icon(Icons.delete, color: Colors.red),
-                    onPressed: onDelete,
+                    onPressed: () async {
+                      final shouldDelete = await showDialog<bool>(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            backgroundColor: const Color(0xFFB9C5C5), // Match app background
+                            title: Text(
+                              'Confirm Delete',
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w300,
+                                color: Colors.blueGrey[800],
+                              ),
+                            ),
+                            content: Text(
+                              'Are you sure you want to delete this product?',
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w300,
+                                color: Colors.blueGrey[600],
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(false),
+                                child: Text(
+                                  'Cancel',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w300,
+                                    color: Colors.blueGrey[800],
+                                  ),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(true),
+                                child: Text(
+                                  'Delete',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w300,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                      if (shouldDelete == true) {
+                        onDelete();
+                      }
+                    },
                   ),
                 ],
               ),
