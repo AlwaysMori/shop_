@@ -25,13 +25,13 @@ class _CustomButtonState extends State<CustomButton> {
         duration: Duration(milliseconds: 200),
         curve: Curves.easeInOut,
         decoration: BoxDecoration(
-          color: Colors.blueGrey, // Warna lebih lembut
-          borderRadius: BorderRadius.circular(0), // No corner radius
+          color: Colors.blueGrey, 
+          borderRadius: BorderRadius.circular(0),
           boxShadow: [
             BoxShadow(
-              color: Colors.black, // Solid black shadow
-              offset: Offset(4, 4), // Shadow on the right and bottom
-              blurRadius: 0, // No blur for solid shadow
+              color: Colors.black, 
+              offset: Offset(4, 4), 
+              blurRadius: 0, 
             ),
           ],
         ),
@@ -52,7 +52,7 @@ class _CustomButtonState extends State<CustomButton> {
               fontSize: 16,
               fontWeight: FontWeight.w300,
               color: Colors.white,
-              fontFamily: 'Poppins', // Apply Poppins font
+              fontFamily: 'Poppins',
             ),
           ),
         ),

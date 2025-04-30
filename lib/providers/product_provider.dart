@@ -30,14 +30,14 @@ class ProductProvider extends ChangeNotifier {
         await _localStorageService.saveProducts(_products);
       }
     } catch (e) {
-      debugPrint('Failed to load products: $e');
+      debugPrint(        'Failed to load products: $e'      );
       // Fallback to API fetch if local storage fails
       try {
         final fetchedProducts = await _productService.fetchProducts();
         _products = fetchedProducts;
         await _localStorageService.saveProducts(_products);
       } catch (apiError) {
-        debugPrint('Failed to fetch products from API: $apiError');
+        debugPrint(          'Failed to fetch products from API: $apiError'        );
       }
     } finally {
       _isLoading = false;
@@ -58,7 +58,7 @@ class ProductProvider extends ChangeNotifier {
       await _localStorageService.saveProducts(_products);
       notifyListeners();
     } catch (e) {
-      debugPrint('Failed to add product: $e');
+      debugPrint(        'Failed to add product: $e'      );
     }
   }
 

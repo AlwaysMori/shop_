@@ -11,7 +11,7 @@ class ResponsivePadding extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: isDesktop ? 200.0 : 24.0, // Adjust padding for desktop
+        horizontal: isDesktop ? 200.0 : 24.0, 
       ),
       child: child,
     );

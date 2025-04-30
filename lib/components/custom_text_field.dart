@@ -19,13 +19,13 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.blueGrey[50], // Warna lebih lembut
-        borderRadius: BorderRadius.circular(0), // No corner radius
+        color: Colors.blueGrey[50], 
+        borderRadius: BorderRadius.circular(0), 
         boxShadow: [
           BoxShadow(
-            color: Colors.black, // Solid black shadow
-            offset: Offset(4, 4), // Shadow on the right and bottom
-            blurRadius: 0, // No blur for solid shadow
+            color: Colors.black, 
+            offset: Offset(4, 4), 
+            blurRadius: 0, 
           ),
         ],
       ),
@@ -37,14 +37,14 @@ class CustomTextField extends StatelessWidget {
           hintText: hintText,
           hintStyle: TextStyle(
             fontFamily: 'Poppins',
-            fontWeight: FontWeight.w300, // Apply Poppins font
-            color: Colors.blueGrey, // Match the icon color
+            fontWeight: FontWeight.w300, 
+            color: Colors.blueGrey,
           ),
-          prefixIcon: Icon(icon, color: Colors.blueGrey), // Warna lebih lembut
+          prefixIcon: Icon(icon, color: Colors.blueGrey), 
           filled: true,
-          fillColor: Colors.transparent, // Transparent to match container color
+          fillColor: Colors.transparent, 
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(0), // No corner radius
+            borderRadius: BorderRadius.circular(0), 
             borderSide: BorderSide.none,
           ),
         ),

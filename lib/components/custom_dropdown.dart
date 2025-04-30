@@ -18,9 +18,9 @@ class CustomDropdown<T> extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.0),
       decoration: BoxDecoration(
-        color: Colors.blueGrey[50], // Softer background color
+        color: Colors.blueGrey[50], 
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.blueGrey, width: 1), // Match theme color
+        border: Border.all(color: Colors.blueGrey, width: 1),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<T>(
@@ -28,9 +28,9 @@ class CustomDropdown<T> extends StatelessWidget {
           hint: Text(
             hintText,
             style: TextStyle(
-              color: Colors.blueGrey, // Match theme color
-              fontFamily: 'Poppins', // Apply Poppins font
-              fontWeight: FontWeight.w300, // Light weight
+              color: Colors.blueGrey, 
+              fontFamily: 'Poppins', 
+              fontWeight: FontWeight.w300, 
             ),
           ),
           items: items
@@ -39,16 +39,16 @@ class CustomDropdown<T> extends StatelessWidget {
                     child: Text(
                       item.toString(),
                       style: TextStyle(
-                        color: Colors.blueGrey, // Match theme color
-                        fontFamily: 'Poppins', // Apply Poppins font
-                        fontWeight: FontWeight.w300, // Light weight
+                        color: Colors.blueGrey,
+                        fontFamily: 'Poppins', 
+                        fontWeight: FontWeight.w300, 
                       ),
                     ),
                   ))
               .toList(),
           onChanged: onChanged,
           dropdownColor: Colors.white,
-          icon: Icon(Icons.arrow_drop_down, color: Colors.blueGrey), // Match theme color
+          icon: Icon(Icons.arrow_drop_down, color: Colors.blueGrey), 
         ),
       ),
     );

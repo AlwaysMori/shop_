@@ -7,6 +7,7 @@ import '../components/custom_product_form.dart';
 import '../components/custom_search_bar.dart';
 import '../home/detail/detail_product.dart';
 import '../auth/login_page.dart';
+import '../components/notification_helper.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -75,7 +76,7 @@ class _HomePageState extends State<HomePage> {
           });
         },
         child: Container(
-          color: const Color(0xFFB9C5C5), // Match login page background color
+          color: const Color(0xFFB9C5C5), 
           child: Column(
             children: [
               CustomSearchBar(
@@ -121,6 +122,11 @@ class _HomePageState extends State<HomePage> {
                                     setState(() {
                                       _filteredProducts = productProvider.products;
                                     });
+                                    NotificationHelper.showNotification(
+                                      context,
+                                      'Product deleted successfully',
+                                      isError: false,
+                                    );
                                   },
                                   onEdit: () => _showProductForm(context, product: product), // Edit berdasarkan produk yang dipilih
                                 ),
@@ -150,9 +156,19 @@ class _HomePageState extends State<HomePage> {
             if (product == null) {
               Provider.of<ProductProvider>(context, listen: false)
                   .addProduct(newProduct);
+              NotificationHelper.showNotification(
+                context,
+                'Product added successfully',
+                isError: false,
+              );
             } else {
               Provider.of<ProductProvider>(context, listen: false)
                   .updateProduct(newProduct);
+              NotificationHelper.showNotification(
+                context,
+                'Product updated successfully',
+                isError: false,
+              );
             }
           },
         );

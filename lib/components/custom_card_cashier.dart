@@ -19,35 +19,35 @@ class CustomCardCashier extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.zero,
-      elevation: 0, // Remove default elevation
+      elevation: 0, 
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(0), // Square corners
+        borderRadius: BorderRadius.circular(0), 
       ),
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.blueGrey[100]!, Colors.blueGrey[300]!], // Gradient background
+            colors: [Colors.blueGrey[100]!, Colors.blueGrey[300]!],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black, // Solid black shadow
-              offset: Offset(4, 4), // Shadow on the right and bottom
-              blurRadius: 0, // No blur for solid shadow
+              color: Colors.black,
+              offset: Offset(4, 4), 
+              blurRadius: 0, 
             ),
           ],
         ),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(0), // Square corners
+          borderRadius: BorderRadius.circular(0), 
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(0), // Square corners
+                  borderRadius: BorderRadius.circular(0), 
                   child: Image.network(
                     imageUrl,
                     height: 120,
@@ -68,9 +68,9 @@ class CustomCardCashier extends StatelessWidget {
                   title,
                   style: TextStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.w300, // Light weight
-                    color: Colors.blueGrey[800], // Slightly darker text color
-                    fontFamily: 'Poppins', // Apply Poppins font
+                    fontWeight: FontWeight.w300, 
+                    color: Colors.blueGrey[800], 
+                    fontFamily: 'Poppins', 
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -80,8 +80,8 @@ class CustomCardCashier extends StatelessWidget {
                   subtitle,
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.blueGrey[600], // Slightly lighter text color
-                    fontFamily: 'Poppins', // Apply Poppins font
+                    color: Colors.blueGrey[600],
+                    fontFamily: 'Poppins', 
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

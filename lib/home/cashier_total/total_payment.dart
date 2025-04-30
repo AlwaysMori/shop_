@@ -4,6 +4,7 @@ import '../../providers/product_provider.dart';
 import '../../models/product.dart';
 import '../../components/custom_total_payment_card.dart';
 import '../../components/custom_cart_card.dart';
+import '../../components/notification_helper.dart'; // Tambahkan import
 
 class TotalPaymentPage extends StatefulWidget {
   @override
@@ -25,8 +26,10 @@ class _TotalPaymentPageState extends State<TotalPaymentPage> {
     setState(() {
       _cart.removeWhere((item) => item.id == product.id); // Update local cart
     });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('${product.title} removed from cart!')),
+    NotificationHelper.showNotification(
+      context,
+      '${product.title} removed from cart!',
+      isError: false,
     );
   }
 
@@ -35,8 +38,10 @@ class _TotalPaymentPageState extends State<TotalPaymentPage> {
       _cart.clear();
     });
     Provider.of<ProductProvider>(context, listen: false).saveCart(_cart);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Payment completed, cart cleared!')),
+    NotificationHelper.showNotification(
+      context,
+      'Payment completed, cart cleared!',
+      isError: false,
     );
     Navigator.pop(context, _cart);
   }

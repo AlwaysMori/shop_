@@ -20,13 +20,13 @@ class CustomTotalPaymentCard extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.blueGrey[50], // Match theme background
-          borderRadius: BorderRadius.circular(0), // Square corners
+          color: Colors.blueGrey[50], 
+          borderRadius: BorderRadius.circular(0), 
           boxShadow: [
             BoxShadow(
-              color: Colors.black, // Solid black shadow
-              offset: Offset(4, 4), // Shadow on the right and bottom
-              blurRadius: 0, // No blur for solid shadow
+              color: Colors.black, 
+              offset: Offset(4, 4), 
+              blurRadius: 0, 
             ),
           ],
         ),
@@ -37,9 +37,9 @@ class CustomTotalPaymentCard extends StatelessWidget {
               'Total Payment',
               style: TextStyle(
                 fontSize: 20,
-                fontWeight: FontWeight.w500, // Medium weight
-                color: Colors.blueGrey[800], // Slightly darker text color
-                fontFamily: 'Poppins', // Apply Poppins font
+                fontWeight: FontWeight.w500, 
+                color: Colors.blueGrey[800], 
+                fontFamily: 'Poppins', 
               ),
             ),
             SizedBox(height: 16),
@@ -50,17 +50,17 @@ class CustomTotalPaymentCard extends StatelessWidget {
                   'Total Items:',
                   style: TextStyle(
                     fontSize: 16,
-                    fontFamily: 'Poppins', // Apply Poppins font
-                    color: Colors.blueGrey[700], // Slightly lighter text color
+                    fontFamily: 'Poppins',
+                    color: Colors.blueGrey[700], 
                   ),
                 ),
                 Text(
                   '$totalItems',
                   style: TextStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.w500, // Medium weight
-                    color: Colors.blueGrey[800], // Slightly darker text color
-                    fontFamily: 'Poppins', // Apply Poppins font
+                    fontWeight: FontWeight.w500,
+                    color: Colors.blueGrey[800], 
+                    fontFamily: 'Poppins', 
                   ),
                 ),
               ],
@@ -73,17 +73,17 @@ class CustomTotalPaymentCard extends StatelessWidget {
                   'Total Price:',
                   style: TextStyle(
                     fontSize: 16,
-                    fontFamily: 'Poppins', // Apply Poppins font
-                    color: Colors.blueGrey[700], // Slightly lighter text color
+                    fontFamily: 'Poppins', 
+                    color: Colors.blueGrey[700], 
                   ),
                 ),
                 Text(
                   '\$${totalPrice.toStringAsFixed(2)}',
                   style: TextStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.w500, // Medium weight
-                    color: Colors.blueGrey[800], // Slightly darker text color
-                    fontFamily: 'Poppins', // Apply Poppins font
+                    fontWeight: FontWeight.w500, 
+                    color: Colors.blueGrey[800], 
+                    fontFamily: 'Poppins', 
                   ),
                 ),
               ],
@@ -95,12 +95,12 @@ class CustomTotalPaymentCard extends StatelessWidget {
                 TextButton(
                   onPressed: () => Navigator.pop(context),
                   style: TextButton.styleFrom(
-                    foregroundColor: Colors.blueGrey, // Match theme color
+                    foregroundColor: Colors.blueGrey,
                   ),
                   child: Text(
                     'Cancel',
                     style: TextStyle(
-                      fontFamily: 'Poppins', // Apply Poppins font
+                      fontFamily: 'Poppins', 
                     ),
                   ),
                 ),
@@ -110,17 +110,17 @@ class CustomTotalPaymentCard extends StatelessWidget {
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueGrey, // Match theme color
+                    backgroundColor: Colors.blueGrey, 
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0), // Square corners
+                      borderRadius: BorderRadius.circular(0), 
                     ),
                   ),
                   child: Text(
                     'Complete',
                     style: TextStyle(
                       color: Colors.white,
-                      fontFamily: 'Poppins', // Apply Poppins font
+                      fontFamily: 'Poppins', 
                     ),
                   ),
                 ),

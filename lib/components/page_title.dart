@@ -12,7 +12,7 @@ class PageTitle extends StatelessWidget {
     return Text(
       title,
       style: TextStyle(
-        fontSize: isDesktop ? 40 : 32, // Larger font for desktop
+        fontSize: isDesktop ? 40 : 32, 
         fontWeight: FontWeight.bold,
         color: Colors.blue,
       ),

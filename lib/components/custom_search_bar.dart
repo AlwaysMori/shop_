@@ -15,13 +15,13 @@ class CustomSearchBar extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.blueGrey[50], // Match theme background
-          borderRadius: BorderRadius.circular(0), // Square corners
+          color: Colors.blueGrey[50], 
+          borderRadius: BorderRadius.circular(0), 
           boxShadow: [
             BoxShadow(
-              color: Colors.black, // Solid black shadow
-              offset: Offset(4, 4), // Shadow on the right and bottom
-              blurRadius: 0, // No blur for solid shadow
+              color: Colors.black, 
+              offset: Offset(4, 4), 
+              blurRadius: 0, 
             ),
           ],
         ),
@@ -30,15 +30,15 @@ class CustomSearchBar extends StatelessWidget {
           decoration: InputDecoration(
             hintText: 'Search products...',
             hintStyle: TextStyle(
-              fontFamily: 'Poppins', // Apply Poppins font
-              fontWeight: FontWeight.w300, // Light weight
-              color: Colors.blueGrey, // Match theme color
+              fontFamily: 'Poppins', 
+              fontWeight: FontWeight.w300, 
+              color: Colors.blueGrey, 
             ),
-            prefixIcon: Icon(Icons.search, color: Colors.blueGrey), // Match theme color
+            prefixIcon: Icon(Icons.search, color: Colors.blueGrey), 
             filled: true,
-            fillColor: Colors.transparent, // Transparent to match container color
+            fillColor: Colors.transparent, 
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(0), // Square corners
+              borderRadius: BorderRadius.circular(0),
               borderSide: BorderSide.none,
             ),
           ),

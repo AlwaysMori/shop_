@@ -8,6 +8,7 @@ import '../components/custom_card_cashier.dart';
 import '../components/custom_search_bar.dart';
 import '../auth/login_page.dart';
 import '../home/cashier_total/total_payment.dart';
+import '../components/notification_helper.dart'; // Tambahkan import
 
 class CashierPage extends StatefulWidget {
   @override
@@ -39,8 +40,10 @@ class _CashierPageState extends State<CashierPage> {
         _filteredProducts = localProducts;
       });
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load products: $e')),
+      NotificationHelper.showNotification(
+        context,
+        'Failed to load products: $e',
+        isError: true,
       );
     } finally {
       setState(() {
@@ -60,8 +63,10 @@ class _CashierPageState extends State<CashierPage> {
 
   void _addToCart(Product product) {
     Provider.of<ProductProvider>(context, listen: false).addToCart(product);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('${product.title} added to cart!')),
+    NotificationHelper.showNotification(
+      context,
+      '${product.title} added to cart!',
+      isError: false,
     );
   }
 
