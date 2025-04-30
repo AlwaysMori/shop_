@@ -22,6 +22,21 @@ class _RegisterPageState extends State<RegisterPage> {
   String _position = 'Manager';
   final EmployeeService _employeeService = EmployeeService();
 
+  @override
+  void initState() {
+    super.initState();
+    print('RegisterPage initialized');
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    _nameController.dispose();
+    print('RegisterPage disposed');
+    super.dispose();
+  }
+
   Future<bool> _isUsernameDuplicate(String username) async {
     final List<Employee> employees = await _employeeService.getEmployees();
     return employees.any((employee) => employee.username == username);
@@ -31,7 +46,6 @@ class _RegisterPageState extends State<RegisterPage> {
     if (_formKey.currentState!.validate()) {
       final String username = _usernameController.text.trim();
 
-      // Periksa apakah username sudah ada
       if (await _isUsernameDuplicate(username)) {
         NotificationHelper.showNotification(
           context,
@@ -100,7 +114,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFB9C5C5), // Match theme background color
+      backgroundColor: const Color(0xFFB9C5C5),
       body: Center(
         child: SingleChildScrollView(
           child: ResponsivePadding(
@@ -114,14 +128,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     'REGISTER PAGE',
                     style: TextStyle(
                       fontSize: 32,
-                      fontWeight: FontWeight.w300, // Light weight
-                      color: Colors.blueGrey, // Match theme color
-                      fontFamily: 'Poppins', // Apply Poppins font
+                      fontWeight: FontWeight.w300,
+                      color: Colors.blueGrey,
+                      fontFamily: 'Poppins',
                     ),
                   ),
                   Image.asset(
-                    'assets/images/login.png', // Replace with your image path
-                    height: 200, // Adjust the height as needed
+                    'assets/images/login.png',
+                    height: 200,
                   ),
                   SizedBox(height: 10),
                   ConstrainedBox(
@@ -178,8 +192,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           'Jabatan:',
                           style: TextStyle(
                             fontSize: 16,
-                            color: Colors.blueGrey, // Match theme color
-                            fontFamily: 'Poppins', // Apply Poppins font
+                            color: Colors.blueGrey,
+                            fontFamily: 'Poppins',
                           ),
                         ),
                         SizedBox(width: 16),
@@ -209,9 +223,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Text(
                       'Already have an account? Login',
                       style: TextStyle(
-                        color: Colors.blueGrey, // Match theme color
+                        color: Colors.blueGrey,
                         fontWeight: FontWeight.w300,
-                        fontFamily: 'Poppins', // Apply Poppins font
+                        fontFamily: 'Poppins',
                       ),
                     ),
                   ),
