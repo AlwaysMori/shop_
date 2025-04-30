@@ -19,22 +19,22 @@ class CustomCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      elevation: 0, // Remove default elevation
+      elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(0), // Square corners
+        borderRadius: BorderRadius.circular(0),
       ),
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.blueGrey[100]!, Colors.blueGrey[300]!], // Gradient background
+            colors: [Colors.blueGrey[100]!, Colors.blueGrey[300]!],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black, // Solid black shadow
-              offset: Offset(5, 6), // Shadow on the right and bottom
-              blurRadius: 0, // No blur for solid shadow
+              color: Colors.black,
+              offset: Offset(5, 6),
+              blurRadius: 0,
             ),
           ],
         ),
@@ -43,7 +43,7 @@ class CustomCard extends StatelessWidget {
           child: Row(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.circular(0), // Square corners
+                borderRadius: BorderRadius.circular(0),
                 child: Image.network(
                   imageUrl,
                   width: 50,
@@ -63,9 +63,9 @@ class CustomCard extends StatelessWidget {
                       title,
                       style: TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w300, // Light weight
-                        color: Colors.blueGrey[800], // Slightly darker text color
-                        fontFamily: 'Poppins', // Apply Poppins font
+                        fontWeight: FontWeight.w300,
+                        color: Colors.blueGrey[800],
+                        fontFamily: 'Poppins',
                       ),
                     ),
                     SizedBox(height: 4),
@@ -73,8 +73,8 @@ class CustomCard extends StatelessWidget {
                       subtitle,
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.blueGrey[600], // Slightly lighter text color
-                        fontFamily: 'Poppins', // Apply Poppins font
+                        color: Colors.blueGrey[600],
+                        fontFamily: 'Poppins',
                       ),
                     ),
                   ],
@@ -94,7 +94,7 @@ class CustomCard extends StatelessWidget {
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            backgroundColor: const Color(0xFFB9C5C5), // Match app background
+                            backgroundColor: const Color(0xFFB9C5C5),
                             title: Text(
                               'Confirm Delete',
                               style: TextStyle(
