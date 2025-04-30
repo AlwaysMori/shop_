@@ -54,11 +54,11 @@ class _HomePageState extends State<HomePage> {
         title: Text(
           'Product List',
           style: TextStyle(
-            fontFamily: 'Poppins', // Apply Poppins font
-            fontWeight: FontWeight.w300, // Light weight
+            fontFamily: 'Poppins', 
+            fontWeight: FontWeight.w300, 
           ),
         ),
-        backgroundColor: Colors.blueGrey, // Match login page theme
+        backgroundColor: Colors.blueGrey, 
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
@@ -92,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                               'No products found.',
                               style: TextStyle(
                                 fontFamily: 'Poppins', 
-                                fontWeight: FontWeight.w300, // Light weight
+                                fontWeight: FontWeight.w300, 
                                 color: Colors.blueGrey, 
                               ),
                             ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CustomTextField extends StatelessWidget {
+class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String hintText;
   final IconData icon;
@@ -13,19 +13,33 @@ class CustomTextField extends StatelessWidget {
     required this.icon,
     this.obscureText = false,
     this.validator,
-  });
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<CustomTextField> createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
+  late bool _obscureText;
+
+  @override
+  void initState() {
+    super.initState();
+    _obscureText = widget.obscureText;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.blueGrey[50], 
-        borderRadius: BorderRadius.circular(0), 
+        color: Colors.blueGrey[50],
+        borderRadius: BorderRadius.circular(0),
         boxShadow: [
           BoxShadow(
-            color: Colors.black, 
-            offset: Offset(4, 4), 
-            blurRadius: 0, 
+            color: Colors.black,
+            offset: Offset(4, 4),
+            blurRadius: 0,
           ),
         ],
       ),
@@ -37,22 +51,35 @@ class CustomTextField extends StatelessWidget {
           ),
         ),
         child: TextFormField(
-          controller: controller,
-          obscureText: obscureText,
-          validator: validator,
-          cursorColor: Colors.blueGrey, 
+          controller: widget.controller,
+          obscureText: _obscureText,
+          validator: widget.validator,
+          cursorColor: Colors.blueGrey,
           decoration: InputDecoration(
-            hintText: hintText,
+            hintText: widget.hintText,
             hintStyle: TextStyle(
               fontFamily: 'Poppins',
-              fontWeight: FontWeight.w300, 
+              fontWeight: FontWeight.w300,
               color: Colors.blueGrey,
             ),
-            prefixIcon: Icon(icon, color: Colors.blueGrey), 
+            prefixIcon: Icon(widget.icon, color: Colors.blueGrey),
+            suffixIcon: widget.obscureText
+                ? IconButton(
+                    icon: Icon(
+                      _obscureText ? Icons.visibility_off : Icons.visibility,
+                      color: Colors.blueGrey,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
+                  )
+                : null,
             filled: true,
-            fillColor: Colors.transparent, 
+            fillColor: Colors.transparent,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(0), 
+              borderRadius: BorderRadius.circular(0),
               borderSide: BorderSide.none,
             ),
           ),

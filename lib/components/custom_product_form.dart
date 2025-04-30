@@ -128,7 +128,7 @@ class _CustomProductFormState extends State<CustomProductForm> {
                         if (value == null || value.isEmpty) {
                           return 'Image URL is required';
                         }
-                        final urlPattern = r'^(https?:\/\/)?([\w\-])+\.{1}([a-zA-Z]{2,63})([\/\w\.-]*)*\/?$';
+                        final urlPattern = r'^(http|https):\/\/[^ "]+$';
                         final isValidUrl = RegExp(urlPattern).hasMatch(value);
                         if (!isValidUrl) {
                           return 'Enter a valid URL';
@@ -145,7 +145,7 @@ class _CustomProductFormState extends State<CustomProductForm> {
             TextButton(
               onPressed: () => Navigator.pop(context),
               style: TextButton.styleFrom(
-                backgroundColor: Colors.blueGrey[100], // Tambahkan background
+                backgroundColor: Colors.blueGrey[100], 
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -177,7 +177,7 @@ class _CustomProductFormState extends State<CustomProductForm> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
-                foregroundColor: Colors.white, // Pastikan teks tetap putih
+                foregroundColor: Colors.white, 
               ),
               child: Text(
                 widget.product == null ? 'Add' : 'Save',

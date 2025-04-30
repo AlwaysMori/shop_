@@ -16,39 +16,62 @@ class CustomDropdown<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.0),
       decoration: BoxDecoration(
-        color: Colors.blueGrey[50], 
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.blueGrey, width: 1),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<T>(
-          value: value,
-          hint: Text(
-            hintText,
-            style: TextStyle(
-              color: Colors.blueGrey, 
-              fontFamily: 'Poppins', 
-              fontWeight: FontWeight.w300, 
-            ),
+        color: Colors.blueGrey[50],
+        borderRadius: BorderRadius.circular(0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black,
+            offset: Offset(4, 4),
+            blurRadius: 0,
           ),
-          items: items
-              .map((item) => DropdownMenuItem<T>(
-                    value: item,
-                    child: Text(
-                      item.toString(),
-                      style: TextStyle(
-                        color: Colors.blueGrey,
-                        fontFamily: 'Poppins', 
-                        fontWeight: FontWeight.w300, 
+        ],
+      ),
+      child: InputDecorator(
+        decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: TextStyle(
+            color: Colors.blueGrey,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w300,
+          ),
+          filled: true,
+          fillColor: Colors.blueGrey[50],
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(0),
+            borderSide: BorderSide.none,
+          ),
+          contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
+        ),
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton<T>(
+            value: value,
+            isExpanded: true,
+            hint: Text(
+              hintText,
+              style: TextStyle(
+                color: Colors.blueGrey,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+            items: items
+                .map((item) => DropdownMenuItem<T>(
+                      value: item,
+                      child: Text(
+                        item.toString(),
+                        style: TextStyle(
+                          color: Colors.blueGrey,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w300,
+                        ),
                       ),
-                    ),
-                  ))
-              .toList(),
-          onChanged: onChanged,
-          dropdownColor: Colors.white,
-          icon: Icon(Icons.arrow_drop_down, color: Colors.blueGrey), 
+                    ))
+                .toList(),
+            onChanged: onChanged,
+            dropdownColor: Colors.white,
+            icon: Icon(Icons.arrow_drop_down, color: Colors.blueGrey),
+          ),
         ),
       ),
     );
