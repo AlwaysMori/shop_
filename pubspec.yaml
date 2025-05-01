@@ -64,4 +64,4 @@ flutter:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/images/login.png"
+  image_path: "assets/logo/logo.png"
