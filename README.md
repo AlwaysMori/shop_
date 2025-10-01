@@ -1,4 +1,4 @@
-# Bank Lampung
+
 
 A new Flutter project.
 
@@ -14,5 +14,5 @@ A new Flutter project.
 
 ```bash
 git clone <this-repo-url>
-cd bank_lampung
+cd shop_
 flutter pub get
